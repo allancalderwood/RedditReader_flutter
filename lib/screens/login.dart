@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:redditreader_flutter/screens/register.dart';
+import 'package:redditreader_flutter/screens/register.dart'; // import register page
 import '../styles/theme.dart'; // import theme of app
 import '../utils/slides.dart'; // import slide animations
-import 'package:redditreader_flutter/styles/inputDecoration.dart';
+import 'authWebView.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key, this.title}) : super(key: key);
@@ -13,24 +13,29 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController _usernameController = new TextEditingController();
-  final TextEditingController _passwordController = new TextEditingController();
-
-  String _username = "";
-  String _password = "";
 
   void _attemptLogin() {  // TODO login functionality
-    print(_username.toString());
-    print(_password.toString());
+    Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => AuthWebView())
+        );
     setState(() {
     });
 
   }
 
+  Text _checkMessages(){
+    final Map arguments = ModalRoute.of(context).settings.arguments;
+    if (arguments != null) {
+      return arguments['message'];
+    }else return Text("");
+  }
+
   // content of the screen
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+
+     return Scaffold(
         body: Padding(
             padding: EdgeInsets.all(50),
             child: Center(
@@ -38,37 +43,24 @@ class _LoginPageState extends State<LoginPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Image.asset("assets/images/logo.png", width: 200,),
-                    Text('RedditReader', style: currentTheme.textTheme.headline2,),
-                    SizedBox(height: 50),
-                    new TextField(
-                      style: currentTheme.textTheme.bodyText2,
-                      decoration: buildInputDecoration("Username"),
-                      enabled: true,
-                      maxLength: 30,
-                      maxLengthEnforced: true,
-                      controller: _usernameController,
-                      onChanged:  (String s){
-                        setState(() {
-                          _username = s;
-                        });
-                      },
-                    ),
-                    SizedBox(height: 30),
-                    new TextField(
-                      style: currentTheme.textTheme.bodyText2,
-                      decoration: buildInputDecoration("Password"),
-                      enabled: true,
-                      maxLength: 30,
-                      obscureText: true,
-                      maxLengthEnforced: true,
-                      controller: _passwordController,
-                      onChanged:  (String s){
-                        setState(() {
-                          _password = s;
-                        });
-                      },
-                    ),
-                    SizedBox(height: 50),
+                    RichText(
+                        text: TextSpan(
+                        style: currentTheme.textTheme.headline2,
+                        // set the default style for the children TextSpans
+                        children: [
+                          TextSpan(
+                            text: 'Reddit ',
+                              style: TextStyle(
+                                  color: currentTheme.primaryColor
+                              )
+                          ),
+                          TextSpan(
+                              text: 'Reader'
+                          ),
+                        ]
+                    )
+                  ),
+                    SizedBox(height: 100),
                     FlatButton(
                         padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
                         onPressed: _attemptLogin,
@@ -87,7 +79,9 @@ class _LoginPageState extends State<LoginPage> {
                         },
                         padding: EdgeInsets.all(0),
                         child: Text('Click here', style: TextStyle(fontSize: 14.0, color: currentTheme.primaryColor))
-                    )
+                    ),
+                    SizedBox(height: 50),
+                    _checkMessages(),
                   ],
                 ))
         )

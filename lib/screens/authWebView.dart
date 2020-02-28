@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
-import 'package:redditreader_flutter/main.dart';
 import 'package:redditreader_flutter/utils/slides.dart';
-import '../utils/httpRequests.dart';
+import '../utils/redditAPI.dart';
 import '../screens/homePage.dart';
 
 class AuthWebView extends StatefulWidget {
@@ -18,8 +18,13 @@ class _AuthWebViewState extends State<AuthWebView> {
   final flutterWebViewPlugin = new FlutterWebviewPlugin(); // flutter web plugin
 
   void writeTokensStorage(Map<String, String> tokenMap){
+    final storage = new FlutterSecureStorage();
     storage.write(key: 'accessToken', value: tokenMap['accessToken']);
     storage.write(key: 'refreshToken', value: tokenMap['refreshToken']);
+    updateUser().then((value) => (){
+      print("RR: YASSSS2");
+    });
+    print("RR: YASSSS");
     Route route = SlideRight(builder: (context) => HomePage());
     Navigator.push(context, route);
     flutterWebViewPlugin.close();
@@ -29,7 +34,6 @@ class _AuthWebViewState extends State<AuthWebView> {
   void initState() {
     super.initState();
     flutterWebViewPlugin.onUrlChanged.listen((String url) {
-      print("URL IS : $url");
       if(url.startsWith("$redirectURI")){
         if(url.contains('access_denied')){
           Navigator.pushNamed(context, '/Login', arguments:{

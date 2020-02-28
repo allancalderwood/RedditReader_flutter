@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:redditreader_flutter/screens/login.dart';
 import 'package:redditreader_flutter/screens/register.dart';
+import 'package:redditreader_flutter/utils/redditAPI.dart';
 
 import 'styles/theme.dart'; // import theme of app
 import 'screens/homePage.dart'; // import the login page
@@ -22,21 +23,16 @@ class RedditReader extends StatelessWidget {
         "/Register": (BuildContext context)=> new RegisterPage(),
         "/Homepage": (BuildContext context)=> new RegisterPage()
       },
-      home: needAuthorized(),
+      home: _needAuthorized(),
     );
   }
 }
 
-Widget needAuthorized(){
-  storage.read(key: 'accessToken').then((value) => print("$value"));
-  
-  bool _authorized = false;
-
-  if(_authorized==true){
-    //TODO take to login
-    return HomePage(title: 'HomePage');
-  }
-  else{
-    return LoginPage(title: 'Login or Register');;
-  }
+Widget _needAuthorized(){
+  //if(storage.read(key: 'accessToken')==null){ // if not logged in already
+    return LoginPage(title: 'Login or Register');
+ // }else{
+    //refreshToken();
+    //return HomePage(title: 'HomePage');
+  //}
 }

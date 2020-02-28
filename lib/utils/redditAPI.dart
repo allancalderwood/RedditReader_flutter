@@ -13,7 +13,7 @@ final  String duration = 'permanent';
 final  String _scope = 'identity edit flair history modconfig modflair modlog modposts modwiki mysubreddits privatemessages read report save submit subscribe vote wikiedit wikiread';
 final  String tokenBaseURL = 'https://www.reddit.com/api/v1/access_token';
 final  String _userAgent = 'android:com.redditreader.redditreader_flutter:v.1 (by /u/AllanCalderwood)';
-final  String callBaseURL = "https://oauth.reddit.com/";
+final  String callBaseURL = "https://oauth.reddit.com";
 
 // Method for returning the URL for users to authorize the app
 String authorizeURL(){
@@ -55,6 +55,7 @@ String _generateStateString(){
   var responseText = json.decode(response.body);
   String _accessToken = responseText['access_token'];
   String _refreshToken = responseText['refresh_token'];
+  User.token=_accessToken;
   _tokens['accessToken'] =_accessToken;
   _tokens['refreshToken'] =_refreshToken;
   return _tokens;
@@ -70,21 +71,20 @@ void refreshToken(){
 
     var responseText = json.decode(response.body);
     String _accessToken = responseText['access_token'];
+    User.token = _accessToken;
     storage.write(key: 'accessToken', value: _accessToken);
     updateUser();
   });
 }
 
 Future<void> updateUser()async{
-  String _token = await storage.read(key: 'accessToken');
-    Map<String, String> _headers = {'User-Agent':_userAgent,"Content-type": "application/x-www-form-urlencoded", 'Authorization':'Bearer $_token'};
-    http.Response response = await http.get(Uri.encodeFull(callBaseURL+'api/v1/me'), headers: _headers);
+  Map<String, String> _headers = {'User-Agent':_userAgent,"Content-type": "application/x-www-form-urlencoded", 'Authorization':'Bearer ${User.token}'};
+  http.Response response = await http.get(Uri.encodeFull(callBaseURL+'/api/v1/me'), headers: _headers);
 
-    var responseText = json.decode(response.body);
+  var responseText = json.decode(response.body);
     User.username = responseText['name'];
     User.karma = ( (responseText['link_karma']) + (responseText['comment_karma']) );
     User.profileURL = responseText['icon_img'].toString();
-    print("RR: ${responseText}");
     int seconds = ( responseText['created'] /10).floor();
     int daysSince = (seconds/86400).floor();
     var age;
@@ -106,4 +106,17 @@ Future<void> updateUser()async{
     User.accountAgePostfix = message;
     User.updated=true;
     User.storeUser();
+}
+
+Future<void> logOutUser()async{
+  var _bytes = utf8.encode('$clientID:');
+  var _credentials = base64.encode(_bytes);
+
+  Map<String, String> _headers = {'User-Agent':_userAgent,"Content-type": "application/x-www-form-urlencoded", 'Authorization':'Basic $_credentials'};
+  String _body = "token=${User.token}&token_type_hine=access_token";
+  http.post(Uri.encodeFull("https://www.reddit.com/api/v1/revoke_token"), headers: _headers, body: _body);
+
+  String rToken = await storage.read(key: 'refreshToken');
+  String _body2 = "token=$rToken&token_type_hine=refresh_token";
+  http.post(Uri.encodeFull("https://www.reddit.com/api/v1/revoke_token"), headers: _headers, body: _body2);
 }

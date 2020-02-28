@@ -15,6 +15,7 @@ class _RedditReaderAppBarState extends State<RedditReaderAppBar>{
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      backgroundColor: Color(0x00000000),
       leading: IconButton(
         icon: Icon(Icons.menu),
         iconSize: 50.0,

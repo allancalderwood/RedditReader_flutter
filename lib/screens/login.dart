@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:redditreader_flutter/models/user.dart';
+import 'package:redditreader_flutter/screens/homePage.dart';
 import 'package:redditreader_flutter/screens/register.dart'; // import register page
 import '../styles/theme.dart'; // import theme of app
 import '../utils/slides.dart'; // import slide animations
@@ -13,6 +16,23 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
+  @override
+  void initState(){
+    final storage = new FlutterSecureStorage();
+    storage.read(key: 'accessToken').then((value) => skipLogin(value));
+  }
+
+  void skipLogin(String token){
+    print("RR: VALUE $token");
+    if(!(token==null)){
+      User.retrieveUser();
+      Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage())
+      );
+    }
+  }
 
   void _attemptLogin() {  // TODO login functionality
     Navigator.push(

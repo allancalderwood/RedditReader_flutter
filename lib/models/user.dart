@@ -1,12 +1,20 @@
 import 'package:redditreader_flutter/main.dart';
 
 class User {
+  static String _token = '';
   static String _username = 'Username';
   static String _profileURL = 'https://www.redditstatic.com/avatars/avatar_default_03_FFB000.png';
   static int _karma = 0;
   static int _accountAge = 1;
   static String _accountAgePostfix = ' days old';
   static bool _updated = false;
+
+
+  static String get token => _token;
+
+  static set token(String value) {
+    _token = value;
+  }
 
   static String get username => _username;
 
@@ -45,6 +53,7 @@ class User {
   }
 
   static retrieveUser(){
+    storage.read(key: 'accessToken').then((value) => _token=value);
     storage.read(key: 'username').then((value) => _username=value);
     storage.read(key: 'profileURL').then((value) => _profileURL=value);
     storage.read(key: 'karma').then((value) => _karma=int.parse(value));
@@ -58,6 +67,17 @@ class User {
     storage.write(key: 'karma', value: _karma.toString());
     storage.write(key: 'accountAge', value: _accountAge.toInt().toString());
     storage.write(key: 'accountAgePostfix', value: _accountAgePostfix);
+  }
+
+  static logOut(){
+    _token = '';
+    _username = 'Username';
+    _profileURL = 'https://www.redditstatic.com/avatars/avatar_default_03_FFB000.png';
+    _karma = 0;
+    _accountAge = 1;
+    _accountAgePostfix = ' days old';
+    _updated = false;
+    storage.deleteAll();
   }
 
 

@@ -21,10 +21,7 @@ class _AuthWebViewState extends State<AuthWebView> {
     final storage = new FlutterSecureStorage();
     storage.write(key: 'accessToken', value: tokenMap['accessToken']);
     storage.write(key: 'refreshToken', value: tokenMap['refreshToken']);
-    updateUser().then((value) => (){
-      print("RR: YASSSS2");
-    });
-    print("RR: YASSSS");
+    updateUser();
     Route route = SlideRight(builder: (context) => HomePage());
     Navigator.push(context, route);
     flutterWebViewPlugin.close();
@@ -49,7 +46,6 @@ class _AuthWebViewState extends State<AuthWebView> {
 
           // retrieve access token and refresh token and store them
           getAccessToken(_code).then((value) => writeTokensStorage(value));
-
         }
 
       }

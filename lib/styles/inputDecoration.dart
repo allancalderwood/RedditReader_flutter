@@ -16,11 +16,11 @@ InputDecoration buildInputDecoration(String hint, bool theme, Icon icon){
     hintStyle: TextStyle(fontSize: 20.0, color: currentTheme.accentColor),
     hintText: hint,
     enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.all(Radius.circular(15)),
+        borderRadius: BorderRadius.all(Radius.circular(30)),
         borderSide: BorderSide(color: bgCol)
     ),
     focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.all(Radius.circular(15)),
+        borderRadius: BorderRadius.all(Radius.circular(30)),
         borderSide: BorderSide(color: bgCol)
     ),
   );

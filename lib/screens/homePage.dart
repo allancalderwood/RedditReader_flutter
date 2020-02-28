@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:redditreader_flutter/models/user.dart';
 import 'package:redditreader_flutter/styles/inputDecoration.dart';
 import 'package:redditreader_flutter/utils/redditAPI.dart';
 import 'package:redditreader_flutter/widgets/drawer.dart';
@@ -21,17 +25,29 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    _loadHome();
   }
 
   void _loadHome() {  // TODO
+    Map<String, String> _headers = {'User-Agent':clientID,"Content-type": "application/x-www-form-urlencoded", 'Authorization':'Bearer ${User.token}'};
+    print(callBaseURL+'/');
+    http.get(Uri.encodeFull(callBaseURL+'/.json'), headers: _headers).then((response) => (response){
+      var responseText = json.decode(response.body);
+      print("RR Homepage Response: $responseText");
+    });
+
     setState(() {
     });
+  }
+
+  void _loadPopular() {  // TODO
   }
 
   void homeClick(){
     if(!homepage){
       homepage=true;
       popular=false;
+      _loadHome();
       setState(() {
         homeText = currentTheme.textTheme.headline1;
         popularText = TextStyle(fontSize: 26.0,color: currentTheme.primaryColor);
@@ -44,6 +60,7 @@ class _HomePageState extends State<HomePage> {
       popular=true;
       homepage=false;
       setState(() {
+        _loadPopular();
         popularText = currentTheme.textTheme.headline1;
         homeText = TextStyle(fontSize: 26.0,color: currentTheme.primaryColor);
       });

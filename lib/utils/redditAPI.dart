@@ -113,10 +113,10 @@ Future<void> logOutUser()async{
   var _credentials = base64.encode(_bytes);
 
   Map<String, String> _headers = {'User-Agent':_userAgent,"Content-type": "application/x-www-form-urlencoded", 'Authorization':'Basic $_credentials'};
-  String _body = "token=${User.token}&token_type_hine=access_token";
+  String _body = "token=${User.token}&token_type_hint=access_token";
   http.post(Uri.encodeFull("https://www.reddit.com/api/v1/revoke_token"), headers: _headers, body: _body);
 
   String rToken = await storage.read(key: 'refreshToken');
-  String _body2 = "token=$rToken&token_type_hine=refresh_token";
+  String _body2 = "token=$rToken&token_type_hint=refresh_token";
   http.post(Uri.encodeFull("https://www.reddit.com/api/v1/revoke_token"), headers: _headers, body: _body2);
 }

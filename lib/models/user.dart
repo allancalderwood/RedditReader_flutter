@@ -1,4 +1,5 @@
 import 'package:redditreader_flutter/main.dart';
+import 'package:redditreader_flutter/utils/redditAPI.dart';
 
 class User {
   static String _token = '';
@@ -78,6 +79,7 @@ class User {
     _accountAgePostfix = ' days old';
     _updated = false;
     storage.deleteAll();
+    logOutUser();
   }
 
 

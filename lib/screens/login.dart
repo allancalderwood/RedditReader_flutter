@@ -24,7 +24,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void skipLogin(String token){
-    print("RR: VALUE $token");
     if(!(token==null)){
       User.retrieveUser();
       Navigator.push(
@@ -34,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  void _attemptLogin() {  // TODO login functionality
+  void _attemptLogin() {
     Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => AuthWebView())

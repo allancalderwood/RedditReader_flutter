@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:redditreader_flutter/models/post.dart';
 import 'package:redditreader_flutter/models/user.dart';
 import 'package:redditreader_flutter/styles/inputDecoration.dart';
+import 'package:redditreader_flutter/utils/postBuilder.dart';
 import 'package:redditreader_flutter/utils/redditAPI.dart';
+import 'package:redditreader_flutter/utils/timestampHelper.dart';
 import 'package:redditreader_flutter/widgets/drawer.dart';
 import '../styles/theme.dart'; // import theme of app
 import '../widgets/appBar.dart';
@@ -23,31 +25,40 @@ class _HomePageState extends State<HomePage> {
   TextStyle homeText = currentTheme.textTheme.headline1;
   TextStyle popularText = TextStyle(fontSize: 26.0,color: currentTheme.primaryColor);
 
-  @override
-  void initState() {
-    _loadHome();
-  }
-
-  void _loadHome() {  // TODO
+  Future<List<Post>> _loadHome()async{
     Map<String, String> _headers = {'User-Agent':clientID,"Content-type": "application/x-www-form-urlencoded", 'Authorization':'Bearer ${User.token}'};
-    print(callBaseURL+'/');
-    http.get(Uri.encodeFull(callBaseURL+'/.json'), headers: _headers).then((response) => (response){
-      var responseText = json.decode(response.body);
-      print("RR Homepage Response: $responseText");
-    });
-
-    setState(() {
-    });
+    http.Response data = await http.get(Uri.encodeFull(callBaseURL+'/.json'), headers: _headers);
+    var jsonData = json.decode(data.body);
+    print("RR: $jsonData");
+    List<Post> posts = [];
+    for(var p in jsonData['data']['children']){
+      double t = p['data']['created_utc'];
+      String time = readTimestamp(t.toInt());
+      Post post = new Post(p['data']['author_fullname'], p['data']['thumbnail'], p['data']['title'],p['data']['selftext'], p['data']['subreddit'], p['data']['score'], time);
+      posts.add(post);
+    }
+    return posts;
   }
 
-  void _loadPopular() {  // TODO
+  Future<List<Post>> _loadPopular() async{  // TODO
+    Map<String, String> _headers = {'User-Agent':clientID,"Content-type": "application/x-www-form-urlencoded", 'Authorization':'Bearer ${User.token}'};
+    http.Response data = await http.get(Uri.encodeFull(callBaseURL+'/best'), headers: _headers);
+    var jsonData = json.decode(data.body);
+    print("RR: ${jsonData}");
+    List<Post> posts = [];
+    for(var p in jsonData['data']['children']){
+      double t = p['data']['created_utc'];
+      String time = readTimestamp(t.toInt());
+      Post post = new Post(p['data']['author_fullname'], p['data']['thumbnail'], p['data']['title'],p['data']['selftext'], p['data']['subreddit'], p['data']['score'], time);
+      posts.add(post);
+    }
+    return posts;
   }
 
   void homeClick(){
     if(!homepage){
       homepage=true;
       popular=false;
-      _loadHome();
       setState(() {
         homeText = currentTheme.textTheme.headline1;
         popularText = TextStyle(fontSize: 26.0,color: currentTheme.primaryColor);
@@ -60,7 +71,6 @@ class _HomePageState extends State<HomePage> {
       popular=true;
       homepage=false;
       setState(() {
-        _loadPopular();
         popularText = currentTheme.textTheme.headline1;
         homeText = TextStyle(fontSize: 26.0,color: currentTheme.primaryColor);
       });
@@ -68,7 +78,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   void search(){
-
   }
 
   // content of the screen
@@ -101,9 +110,12 @@ class _HomePageState extends State<HomePage> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 20.00, 0, 15.00),
                       child: TextField(
+                        maxLines: 1,
                         decoration: buildInputDecoration("Search...",true,Icon(Icons.search)),
                       ),
-                    )
+                    ),
+                    SizedBox(height: 10),
+                    futurePostBuilder(_loadHome()),
                 ])
         ),
         )

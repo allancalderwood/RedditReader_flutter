@@ -13,6 +13,7 @@ InputDecoration buildInputDecoration(String hint, bool theme, Icon icon){
     filled: true,
     counterText: "",
     prefixIcon: icon,
+
     hintStyle: TextStyle(fontSize: 20.0, color: currentTheme.accentColor),
     hintText: hint,
     enabledBorder: OutlineInputBorder(

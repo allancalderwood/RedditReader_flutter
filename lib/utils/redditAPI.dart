@@ -135,3 +135,21 @@ Future<void> logOutUser()async{
   String _body2 = "token=$rToken&token_type_hint=refresh_token";
   http.post(Uri.encodeFull("https://www.reddit.com/api/v1/revoke_token"), headers: _headers, body: _body2);
 }
+
+void vote(String id, int vote)async{
+  Map<String, String> _headers = {'User-Agent':clientID,"Content-type": "application/x-www-form-urlencoded", 'Authorization':'Bearer ${User.token}'};
+  String _body = "id=$id&dir=$vote";
+  http.Response response = await http.post(Uri.encodeFull(callBaseURL+'/api/vote'), headers: _headers, body: _body);
+}
+
+void save(String id, String category)async{
+  Map<String, String> _headers = {'User-Agent':clientID,"Content-type": "application/x-www-form-urlencoded", 'Authorization':'Bearer ${User.token}'};
+  String _body = "id=$id&category=$category";
+  http.Response response = await http.post(Uri.encodeFull(callBaseURL+'/api/vote'), headers: _headers, body: _body);
+}
+
+void unsave(String id)async{
+  Map<String, String> _headers = {'User-Agent':clientID,"Content-type": "application/x-www-form-urlencoded", 'Authorization':'Bearer ${User.token}'};
+  String _body = "id=$id";
+  http.Response response = await http.post(Uri.encodeFull(callBaseURL+'/api/vote'), headers: _headers, body: _body);
+}

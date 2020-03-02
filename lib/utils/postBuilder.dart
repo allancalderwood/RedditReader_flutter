@@ -61,14 +61,6 @@ class _postWidgetState extends State<postWidget> {
     print("RR: ${widget.post.id}");
   }
 
-  void votePost(String id, int vote)async{
-    Map<String, String> _headers = {'User-Agent':clientID,"Content-type": "application/x-www-form-urlencoded", 'Authorization':'Bearer ${User.token}'};
-    String _body = "id=$id&dir=$vote";
-    http.Response response = await http.post(Uri.encodeFull(callBaseURL+'/api/vote'), headers: _headers, body: _body);
-    var jsonData = json.decode(response.body);
-    print("RR: $jsonData");
-  }
-
   // content of the screen
   @override
   Widget build(BuildContext context) {
@@ -140,12 +132,12 @@ class _postWidgetState extends State<postWidget> {
                                   setState(() {
                                     if(upvoted){
                                       upvoted = false;
-                                      votePost(widget.post.id, 0);
+                                      vote(widget.post.id, 0);
                                     }else{
                                       upvoted = true;
                                       downvoted = false;
                                       widget.post.score++;
-                                      votePost(widget.post.id, 1);
+                                      vote(widget.post.id, 1);
                                     }
                                   });
                                 },
@@ -158,12 +150,12 @@ class _postWidgetState extends State<postWidget> {
                                   setState(() {
                                     if(downvoted){
                                       downvoted = false;
-                                      votePost(widget.post.id, 0);
+                                      vote(widget.post.id, 0);
                                     }else{
                                       downvoted = true;
                                       upvoted = false;
                                       widget.post.score--;
-                                      votePost(widget.post.id, -1);
+                                      vote(widget.post.id, -1);
                                     }
                                   });
                                 },
@@ -176,8 +168,10 @@ class _postWidgetState extends State<postWidget> {
                                   setState(() {
                                     if(liked){
                                       liked = false;
+                                      unsave(widget.post.id);
                                     }else{
                                       liked = true;
+                                      save(widget.post.id, "Posts");
                                     }
                                   });
                                 },
@@ -187,7 +181,9 @@ class _postWidgetState extends State<postWidget> {
                             Container(
                               child: InkWell(
                                 onTap: (){
-                                  // Extras
+                                   AlertDialog(
+                                    // TODO
+                                  );
                                 },
                                 child: Icon(Icons.clear_all, size: 35, color: currentTheme.splashColor),
                               ),

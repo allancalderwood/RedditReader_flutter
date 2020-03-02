@@ -24,35 +24,49 @@ class _HomePageState extends State<HomePage> {
   bool popular=false;
   TextStyle homeText = currentTheme.textTheme.headline1;
   TextStyle popularText = TextStyle(fontSize: 26.0,color: currentTheme.primaryColor);
+  Widget currentPage;
+
+  @override
+  initState(){
+    currentPage = futurePostBuilder(_loadHome());
+    mustCallSuper;
+  }
 
   Future<List<Post>> _loadHome()async{
     Map<String, String> _headers = {'User-Agent':clientID,"Content-type": "application/x-www-form-urlencoded", 'Authorization':'Bearer ${User.token}'};
     http.Response data = await http.get(Uri.encodeFull(callBaseURL+'/.json'), headers: _headers);
     var jsonData = json.decode(data.body);
-    print("RR: $jsonData");
     List<Post> posts = [];
-    for(var p in jsonData['data']['children']){
-      double t = p['data']['created_utc'];
-      String time = readTimestamp(t.toInt());
-      Post post = new Post(p['data']['author_fullname'], p['data']['thumbnail'], p['data']['title'],p['data']['selftext'], p['data']['subreddit'], p['data']['score'], time);
-      posts.add(post);
+    print("RR: $jsonData");
+    if(jsonData['message']=='Unauthorized'){
+      refreshTokenAsync().then((value) => _loadHome());
+    }else{
+      for(var p in jsonData['data']['children']){
+        double t = p['data']['created_utc'];
+        String time = readTimestamp(t.toInt());
+        Post post = new Post(p['data']['name'],p['data']['author_fullname'], p['data']['thumbnail'], p['data']['title'],p['data']['selftext'], p['data']['subreddit'], p['data']['score'],p['data']['num_comments'], time);
+        posts.add(post);
+      }
+      return posts;
     }
-    return posts;
   }
 
   Future<List<Post>> _loadPopular() async{  // TODO
     Map<String, String> _headers = {'User-Agent':clientID,"Content-type": "application/x-www-form-urlencoded", 'Authorization':'Bearer ${User.token}'};
     http.Response data = await http.get(Uri.encodeFull(callBaseURL+'/best'), headers: _headers);
     var jsonData = json.decode(data.body);
-    print("RR: ${jsonData}");
     List<Post> posts = [];
-    for(var p in jsonData['data']['children']){
-      double t = p['data']['created_utc'];
-      String time = readTimestamp(t.toInt());
-      Post post = new Post(p['data']['author_fullname'], p['data']['thumbnail'], p['data']['title'],p['data']['selftext'], p['data']['subreddit'], p['data']['score'], time);
-      posts.add(post);
+    if(jsonData['message']=='Unauthorized'){
+      refreshTokenAsync().then((value) => _loadHome());
+    }else{
+      for(var p in jsonData['data']['children']){
+        double t = p['data']['created_utc'];
+        String time = readTimestamp(t.toInt());
+        Post post = new Post(p['data']['name'],p['data']['author_fullname'], p['data']['thumbnail'], p['data']['title'],p['data']['selftext'], p['data']['subreddit'], p['data']['score'],p['data']['num_comments'], time);
+        posts.add(post);
+      }
+      return posts;
     }
-    return posts;
   }
 
   void homeClick(){
@@ -62,6 +76,7 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         homeText = currentTheme.textTheme.headline1;
         popularText = TextStyle(fontSize: 26.0,color: currentTheme.primaryColor);
+        currentPage = futurePostBuilder(_loadHome());
       });
     }
   }
@@ -73,6 +88,7 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         popularText = currentTheme.textTheme.headline1;
         homeText = TextStyle(fontSize: 26.0,color: currentTheme.primaryColor);
+        currentPage = futurePostBuilder(_loadPopular());
       });
     }
   }
@@ -115,7 +131,9 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     SizedBox(height: 10),
-                    futurePostBuilder(_loadHome()),
+                    Container(
+                      child: currentPage,
+                    ),
                 ])
         ),
         )

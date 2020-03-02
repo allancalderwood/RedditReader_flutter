@@ -1,4 +1,5 @@
 class Post {
+  String id;
   String subreddit;
   String title;
   String selftext;
@@ -6,6 +7,7 @@ class Post {
   String authorName;
   String imageURL;
   String time;
+  int numComments;
 
-  Post(this.authorName, this.imageURL, this.title, this.selftext, this.subreddit, this.score, this.time);
+  Post(this.id,this.authorName, this.imageURL, this.title, this.selftext, this.subreddit, this.score, this.numComments, this.time);
 }

@@ -77,6 +77,21 @@ void refreshToken(){
   });
 }
 
+Future<void> refreshTokenAsync()async{
+  var _bytes = utf8.encode('$clientID:');
+  var _credentials = base64.encode(_bytes);
+  var token = await storage.read(key: 'refreshToken');
+  String _body = "grant_type=refresh_token&refresh_token=$token";
+  Map<String, String> _headers = {'User-Agent':_userAgent,"Content-type": "application/x-www-form-urlencoded", 'Authorization':'Basic $_credentials'};
+  http.Response response = await http.post(Uri.encodeFull(tokenBaseURL), headers: _headers, body: _body);
+
+  var responseText = json.decode(response.body);
+  String _accessToken = responseText['access_token'];
+  User.token = _accessToken;
+  storage.write(key: 'accessToken', value: _accessToken);
+  updateUser();
+}
+
 Future<void> updateUser()async{
   Map<String, String> _headers = {'User-Agent':_userAgent,"Content-type": "application/x-www-form-urlencoded", 'Authorization':'Bearer ${User.token}'};
   http.Response response = await http.get(Uri.encodeFull(callBaseURL+'/api/v1/me'), headers: _headers);

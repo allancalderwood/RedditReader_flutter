@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:redditreader_flutter/models/post.dart';
 import 'package:redditreader_flutter/models/user.dart';
 import 'package:redditreader_flutter/styles/inputDecoration.dart';
-import 'package:redditreader_flutter/utils/postBuilder.dart';
+import 'package:redditreader_flutter/widgets/postBuilder.dart';
 import 'package:redditreader_flutter/utils/redditAPI.dart';
 import 'package:redditreader_flutter/utils/timestampHelper.dart';
 import 'package:redditreader_flutter/widgets/drawer.dart';
@@ -37,15 +37,13 @@ class _HomePageState extends State<HomePage> {
     http.Response data = await http.get(Uri.encodeFull(callBaseURL+'/.json'), headers: _headers);
     var jsonData = json.decode(data.body);
     List<Post> posts = [];
-    print("RR: $jsonData");
     if(jsonData['message']=='Unauthorized'){
       refreshTokenAsync().then((value) => _loadHome());
     }else{
       for(var p in jsonData['data']['children']){
         double t = p['data']['created_utc'];
         String time = readTimestamp(t.toInt());
-        print('RR: ${p['data']['url']}');
-        Post post = new Post(p['data']['name'],p['data']['author_fullname'], p['data']['thumbnail'], p['data']['title'],p['data']['selftext'], p['data']['subreddit'], p['data']['score'],p['data']['num_comments'], time, p['data']['url']);
+        Post post = new Post(p['data']['name'],p['data']['author_fullname'], p['data']['url'],p['data']['thumbnail'], p['data']['title'],p['data']['selftext'], p['data']['subreddit'], p['data']['score'],p['data']['num_comments'], time, p['data']['permalink']);
         posts.add(post);
       }
       return posts;
@@ -63,7 +61,7 @@ class _HomePageState extends State<HomePage> {
       for(var p in jsonData['data']['children']){
         double t = p['data']['created_utc'];
         String time = readTimestamp(t.toInt());
-        Post post = new Post(p['data']['name'],p['data']['author_fullname'], p['data']['thumbnail'], p['data']['title'],p['data']['selftext'], p['data']['subreddit'], p['data']['score'],p['data']['num_comments'], time, p['data']['url']);
+        Post post = new Post(p['data']['name'],p['data']['author_fullname'], p['data']['url'],p['data']['thumbnail'], p['data']['title'],p['data']['selftext'], p['data']['subreddit'], p['data']['score'],p['data']['num_comments'], time, p['data']['url']);
         posts.add(post);
       }
       return posts;

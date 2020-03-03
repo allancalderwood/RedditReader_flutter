@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'dart:convert';
+import 'package:redditreader_flutter/models/user.dart';
+import 'package:http/http.dart' as http;
 import 'package:redditreader_flutter/models/post.dart';
+import 'package:redditreader_flutter/models/subreddit.dart';
+import 'package:redditreader_flutter/screens/subredditPage.dart';
 import 'package:redditreader_flutter/styles/theme.dart';
 import 'package:redditreader_flutter/utils/redditAPI.dart';
 import 'package:share/share.dart';
@@ -57,6 +62,23 @@ class _postWidgetState extends State<postWidget> {
     upvoted = false;
     downvoted = false;
     super.initState();
+  }
+
+  void _loadSubreddit(http.Response response){
+    var jsonData = json.decode(response.body);
+    String name = jsonData['data']['display_name'];
+    String header = jsonData['data']['banner_background_image'];
+    String icon = jsonData['data']['icon_img'];
+    Subreddit sub = new Subreddit(name, icon, header);
+    Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => SubredditPage(sub: sub))
+    );
+  }
+
+  void goToSubreddit(Post p){
+    Map<String, String> _headers = {'User-Agent':clientID,"Content-type": "application/x-www-form-urlencoded", 'Authorization':'Bearer ${User.token}'};
+    http.get(Uri.encodeFull(callBaseURL+'/r/${widget.post.subreddit}/about.json'), headers: _headers).then((response) => _loadSubreddit(response));
   }
 
   void showPostOptions(Post post){
@@ -117,7 +139,7 @@ class _postWidgetState extends State<postWidget> {
                       children: <Widget>[
                         FlatButton(
                           padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                          onPressed: (){},
+                          onPressed: (){goToSubreddit(widget.post);},
                           shape: new RoundedRectangleBorder(
                             borderRadius: new BorderRadius.circular(50.0),
                           ),
@@ -265,12 +287,12 @@ class _postWidgetState extends State<postWidget> {
 
 
 Widget postImage(Post p){
-  if(p.imageURL!="self" ){
-    if(p.imageURL!="nsfw"){
+  if(p.imageURLPreview!="self" ){
+    if(p.imageURLPreview!="nsfw"){
       return ClipRRect(
           child: FadeInImage(
             image: NetworkImage(p.imageURL),
-            placeholder: AssetImage("assets/images/imagePlaceholder.png"),
+            placeholder: NetworkImage(p.imageURLPreview),
             height: 250,
             fit: BoxFit.fill,
           )

@@ -18,7 +18,6 @@ class RedditReader extends StatelessWidget {
       routes: <String, WidgetBuilder>{
         "/Login": (BuildContext context)=> new LoginPage(),
         "/Register": (BuildContext context)=> new RegisterPage(),
-        "/Homepage": (BuildContext context)=> new RegisterPage()
       },
       home: LoginPage(title: 'Login or Register'),
     );

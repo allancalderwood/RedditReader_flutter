@@ -58,7 +58,7 @@ class _MyProfileState extends State<MyProfile> {
                 children: <Widget>[
                   Stack(
                     children: <Widget>[
-                      Container(height: 200, decoration: BoxDecoration(color: currentTheme.primaryColor)),
+                      Container(height: 200, decoration: BoxDecoration(color: Colors.deepPurple)),
                       Padding(
                         padding: EdgeInsets.fromLTRB(20, 120, 20, 20),
                         child: Column(

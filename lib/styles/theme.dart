@@ -11,6 +11,7 @@ ThemeData buildDefaultTheme() {
       accentColor: const Color(0xff272727),
       scaffoldBackgroundColor: const Color(0xff1C1C1C),
       primaryColorDark:const Color(0xff171717),
+      canvasColor:const Color(0xff171717),
       backgroundColor: const Color(0xff1C1C1C),
 
       // Themes for text

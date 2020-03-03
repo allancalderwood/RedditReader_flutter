@@ -159,3 +159,11 @@ void unsave(String id)async{
   String _body = "id=$id";
   http.Response response = await http.post(Uri.encodeFull(callBaseURL+'/api/vote'), headers: _headers, body: _body);
 }
+
+void subscribe(String sr, String action)async{
+  bool skipDefaults = true;
+  Map<String, String> _headers = {'User-Agent':clientID,"Content-type": "application/x-www-form-urlencoded", 'Authorization':'Bearer ${User.token}'};
+  String _body = "action=$action&skip_initial_defaults=$skipDefaults&sr_name=${sr}";
+  http.Response response = await http.post(Uri.encodeFull(callBaseURL+'/api/subscribe'), headers: _headers, body: _body);
+  print('RR: ${json.decode(response.body)}');
+}

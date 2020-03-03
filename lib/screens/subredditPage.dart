@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -7,6 +10,7 @@ import 'package:redditreader_flutter/models/user.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:redditreader_flutter/styles/inputDecoration.dart';
 import 'package:redditreader_flutter/utils/postFactory.dart';
+import 'package:redditreader_flutter/utils/subFactory.dart';
 import 'package:redditreader_flutter/widgets/postBuilder.dart';
 import 'package:redditreader_flutter/utils/redditAPI.dart';
 import 'package:redditreader_flutter/utils/timestampHelper.dart';
@@ -25,12 +29,38 @@ class SubredditPage extends StatefulWidget {
 class _SubredditState extends State<SubredditPage> {
   Widget currentPage;
   String selected;
+  String subStatus = 'Subscribe';
+  bool subbed = false;
 
   @override
   initState(){
     currentPage = futurePostBuilder(_loadSubreddit());
     selected = 'Hot';
+    _loadSubs();
     super.initState();
+  }
+
+  Future<void> _loadSubs()async{
+    http.Response data = await http.get(Uri.encodeFull(callBaseURL+'/subreddits/mine/subscriber.json?limit=1000'), headers: getHeader());
+    var jsonData = json.decode(data.body);
+    List<Subreddit> subs = [];
+    if(jsonData['message']=='Unauthorized'){
+      refreshTokenAsync().then((value) => _loadSubs());
+    }else{
+      subFactory(jsonData, subs);
+      bool contains= false;
+      for (Subreddit s in subs) {
+        if (s.name == widget.sub.name){
+          contains=true;
+        }
+      }
+      setState(() {
+        if(contains){
+          subStatus = 'Subscribed';
+          subbed = true;
+        }
+      });
+    }
   }
 
   changeSelected(String value){
@@ -44,6 +74,21 @@ class _SubredditState extends State<SubredditPage> {
         currentPage = futurePostBuilder(_loadSubredditTop());
       }
     });
+  }
+
+  Future<void> _refresh(){
+    Completer<Null> c = new Completer<Null>();
+    setState((){
+      if(selected=='Hot'){
+        currentPage = futurePostBuilder(_loadSubreddit());
+      }else if(selected=='New'){
+        currentPage = futurePostBuilder(_loadSubredditNew());
+      }else{
+        currentPage = futurePostBuilder(_loadSubredditTop());
+      }
+    });
+    c.complete();
+    return c.future;
   }
 
   Future<List<Post>> _loadSubreddit()async{
@@ -103,7 +148,7 @@ class _SubredditState extends State<SubredditPage> {
                     imageUrl: widget.sub.headerUrl,
                     fit: BoxFit.cover,
                     placeholder: (context, url) => new CircularProgressIndicator(),
-                    errorWidget: (context, url, error) => new Container(height: 300, decoration: BoxDecoration(color: currentTheme.primaryColor),),
+                    errorWidget: (context, url, error) => new Container(height: 300, decoration: BoxDecoration(color: Colors.red),),
                   ),
                   Container(
                     height: 300,
@@ -132,32 +177,11 @@ class _SubredditState extends State<SubredditPage> {
                                 width: 20,
                               ),
                               Text(
-                                'R/${widget.sub.name}', style: currentTheme.textTheme.headline1,
+                                'R/${widget.sub.name}', style: currentTheme.textTheme.headline1, overflow: TextOverflow.ellipsis,
                               ),
                               SizedBox(
                                 width: 50,
                               ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(30.0),
-                                  color: currentTheme.accentColor,
-                                ),
-                                padding: EdgeInsets.fromLTRB(10, 1, 10, 1),
-                                child: DropdownButtonHideUnderline(
-                                  child: new DropdownButton<String>(
-                                    value: selected,
-                                    items: <String>['Hot', 'Top', 'New'].map((String value) {
-                                      return new DropdownMenuItem<String>(
-                                        value: value,
-                                        child: new Text(value, style: currentTheme.textTheme.bodyText1),
-                                      );
-                                    }).toList(),
-                                    onChanged: (value) {
-                                      changeSelected(value);;
-                                    },
-                                  ),
-                                )
-                              )
                             ],
                           ),
                           Padding(
@@ -169,7 +193,58 @@ class _SubredditState extends State<SubredditPage> {
                           ),
                           SizedBox(height: 10),
                           Container(
-                            child: currentPage,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30.0),
+                                      color: Colors.transparent,
+                                    ),
+                                    padding: EdgeInsets.fromLTRB(10, 1, 10, 1),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        DropdownButtonHideUnderline(
+                                          child: new DropdownButton<String>(
+                                            value: selected,
+                                            items: <String>['Hot', 'Top', 'New'].map((String value) {
+                                              return new DropdownMenuItem<String>(
+                                                value: value,
+                                                child: new Text(value, style: currentTheme.textTheme.bodyText1),
+                                              );
+                                            }).toList(),
+                                            onChanged: (value) {
+                                              changeSelected(value);
+                                            },
+                                          ),
+                                        ),
+                                        FlatButton(
+                                          onPressed: (){
+                                            setState(() {
+                                              if(subbed){
+                                                subbed = false;
+                                                subStatus = 'Subscribe';
+                                                subscribe(widget.sub.name, 'unsub');
+                                              }else{
+                                                subbed = true;
+                                                subStatus = 'Subscribed';
+                                                subscribe(widget.sub.name, 'sub');
+                                              }
+                                            });
+                                          },
+                                          child: Text(subStatus),
+                                        )
+                                      ],
+                                    )
+                                ),
+                                RefreshIndicator(
+                                  color: currentTheme.primaryColor,
+                                  onRefresh: _refresh,
+                                  child: currentPage,
+                                ),
+                              ],
+                            ),
                           )
                         ]),
                   )

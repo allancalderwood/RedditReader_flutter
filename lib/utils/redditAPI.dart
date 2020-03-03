@@ -16,7 +16,8 @@ final  String _userAgent = 'android:com.redditreader.redditreader_flutter:v.1 (b
 final  String callBaseURL = "https://oauth.reddit.com";
 
 Map<String, String> getHeader(){
-  return {'User-Agent':clientID,"Content-type": "application/x-www-form-urlencoded", 'Authorization':'Bearer ${User.token}'};
+  String token = User.token;
+  return {'User-Agent':clientID,"Content-type": "application/x-www-form-urlencoded", 'Authorization':'Bearer $token'};
 }
 
 

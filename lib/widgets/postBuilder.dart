@@ -87,7 +87,6 @@ class _postWidgetState extends State<postWidget> {
     var jsonData = json.decode(response.body);
     var userData = jsonData['data'];
     var karma = ( (userData['link_karma']) + (userData['comment_karma']));
-    print('RR: ${userData['icon_img'].toString()}');
     int seconds = ( userData['created'] /10).floor();
     int daysSince = (seconds/86400).floor();
     var age;
@@ -291,7 +290,7 @@ class _postWidgetState extends State<postWidget> {
                                       unsave(widget.post.id);
                                     }else{
                                       liked = true;
-                                      save(widget.post.id, "Posts");
+                                      save(widget.post.id, "posts");
                                     }
                                   });
                                 },

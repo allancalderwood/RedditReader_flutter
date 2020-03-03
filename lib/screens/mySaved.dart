@@ -25,6 +25,19 @@ class _MySavedState extends State<MySaved> {
 
   @override
   initState(){
+    super.initState();
+  }
+
+  Future<List<Post>> _loadSaved()async{
+    http.Response data = await http.get(Uri.encodeFull(callBaseURL+'/user/${User.username}/saved.json'), headers: getHeader());
+    var jsonData = json.decode(data.body);
+    List<Post> posts = [];
+    if(jsonData['message']=='Unauthorized'){
+      refreshTokenAsync().then((value) => _loadSaved());
+    }else{
+      postFactory(jsonData, posts);
+      return posts;
+    }
   }
 
 
@@ -39,7 +52,12 @@ class _MySavedState extends State<MySaved> {
             child: Center(
               child: Column(
                 children: <Widget>[
-                  Text('Your Saved Posts', style: currentTheme.textTheme.headline1,)
+                  SizedBox(height: 30),
+                  Text('Your Saved Posts', style: currentTheme.textTheme.headline1,),
+                  SizedBox(height: 80),
+                  Container(
+                    child: futurePostBuilder(_loadSaved()),
+                  ),
                 ],
               ),
         ),

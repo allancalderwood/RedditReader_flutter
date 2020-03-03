@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:redditreader_flutter/models/post.dart';
 import 'package:redditreader_flutter/models/subreddit.dart';
 import 'package:redditreader_flutter/models/user.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:redditreader_flutter/styles/inputDecoration.dart';
 import 'package:redditreader_flutter/widgets/postBuilder.dart';
 import 'package:redditreader_flutter/utils/redditAPI.dart';
@@ -74,11 +75,15 @@ class _SubredditState extends State<SubredditPage> {
                         children: <Widget>[
                           Row(
                             children: <Widget>[
-                              CircleAvatar(
-                                radius: 30.0,
-                                backgroundImage:
-                                NetworkImage(widget.sub.iconUrl),
-                                backgroundColor: Colors.transparent,
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(100.0),
+                                child: new CachedNetworkImage(
+                                  height: 50,
+                                  width: 50,
+                                  imageUrl: widget.sub.iconUrl,
+                                  placeholder: (context, url) => new CircularProgressIndicator(),
+                                  errorWidget: (context, url, error) => new Icon(Icons.supervised_user_circle),
+                                )
                               ),
                               SizedBox(
                                 width: 20,

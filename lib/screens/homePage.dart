@@ -44,7 +44,8 @@ class _HomePageState extends State<HomePage> {
       for(var p in jsonData['data']['children']){
         double t = p['data']['created_utc'];
         String time = readTimestamp(t.toInt());
-        Post post = new Post(p['data']['name'],p['data']['author_fullname'], p['data']['thumbnail'], p['data']['title'],p['data']['selftext'], p['data']['subreddit'], p['data']['score'],p['data']['num_comments'], time);
+        print('RR: ${p['data']['url']}');
+        Post post = new Post(p['data']['name'],p['data']['author_fullname'], p['data']['thumbnail'], p['data']['title'],p['data']['selftext'], p['data']['subreddit'], p['data']['score'],p['data']['num_comments'], time, p['data']['url']);
         posts.add(post);
       }
       return posts;
@@ -62,7 +63,7 @@ class _HomePageState extends State<HomePage> {
       for(var p in jsonData['data']['children']){
         double t = p['data']['created_utc'];
         String time = readTimestamp(t.toInt());
-        Post post = new Post(p['data']['name'],p['data']['author_fullname'], p['data']['thumbnail'], p['data']['title'],p['data']['selftext'], p['data']['subreddit'], p['data']['score'],p['data']['num_comments'], time);
+        Post post = new Post(p['data']['name'],p['data']['author_fullname'], p['data']['thumbnail'], p['data']['title'],p['data']['selftext'], p['data']['subreddit'], p['data']['score'],p['data']['num_comments'], time, p['data']['url']);
         posts.add(post);
       }
       return posts;

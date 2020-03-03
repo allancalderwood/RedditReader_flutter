@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:redditreader_flutter/models/post.dart';
-import 'package:redditreader_flutter/models/user.dart';
 import 'package:redditreader_flutter/styles/theme.dart';
 import 'package:redditreader_flutter/utils/redditAPI.dart';
+import 'package:share/share.dart';
 
 Widget futurePostBuilder(Future<List<Post>> future){
   return FutureBuilder<List<Post>>(
@@ -58,15 +57,51 @@ class _postWidgetState extends State<postWidget> {
     upvoted = false;
     downvoted = false;
     super.initState();
-    print("RR: ${widget.post.id}");
+  }
+
+  void showPostOptions(Post post){
+    showDialog<Null>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return new AlertDialog(
+          title: new Text('What do you wish to do with this post?'),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text('Share'),
+              onPressed: () {
+                String text = '${post.url}';
+                Share.share(
+                  text,
+                  subject: 'Check out this Reddit Post',
+                );
+              },
+            ),
+            new FlatButton(
+              child: new Text('Report'),
+              onPressed: () {
+                // TODO report
+              },
+            ),
+            new FlatButton(
+              child: new Text('Exit'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   // content of the screen
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(5.00),
+      margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
       child: Card(
+        margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.00))),
         child: InkWell(
           onTap: (){},
@@ -75,21 +110,44 @@ class _postWidgetState extends State<postWidget> {
             children: <Widget>[
               Padding(
                 padding: EdgeInsets.all(15.00),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Column(
                   children: <Widget>[
-                    Container(
-                        width: 280,
-                        child: Text('${widget.post.title}', maxLines: 3, overflow: TextOverflow.ellipsis,style: currentTheme.textTheme.headline4)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        FlatButton(
+                          padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                          onPressed: (){},
+                          shape: new RoundedRectangleBorder(
+                            borderRadius: new BorderRadius.circular(50.0),
+                          ),
+                          color: currentTheme.accentColor,
+                          child: Text('r/${widget.post.subreddit}', style: currentTheme.textTheme.headline5),
+                        ),
+                        SizedBox(width: 10,),
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50.0),
+                            color: currentTheme.accentColor,
+                          ),
+                          padding: EdgeInsets.fromLTRB(0, 0,0, 0),
+                          child: Padding(
+                            padding: EdgeInsets.all(7),
+                            child: Row(
+                              children: <Widget>[
+                                Icon(Icons.access_alarm, size: 20,),
+                                SizedBox(width:5),
+                                Text('${widget.post.time}', style: currentTheme.textTheme.headline4),
+                              ],
+                            ),
+                          )
+                        ),
+                      ],
                     ),
-                    FlatButton(
-                      padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                      onPressed: (){},
-                      shape: new RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(50.0),
-                      ),
-                      color: currentTheme.accentColor,
-                      child: Text('r/${widget.post.subreddit}', style: currentTheme.textTheme.headline5),
+                    SizedBox(height: 10,),
+                    Container(
+                        width: 400,
+                        child: Text('${widget.post.title}', maxLines: 3, overflow: TextOverflow.ellipsis,style: currentTheme.textTheme.headline4)
                     ),
                   ],
                 ),
@@ -106,12 +164,15 @@ class _postWidgetState extends State<postWidget> {
                             Row(
                               children: <Widget>[
                                 Text('${widget.post.score}', style: currentTheme.textTheme.headline4),
-                                Text('pts   ', style: TextStyle(fontSize: 15.0, color: currentTheme.splashColor)),
+                                Text(' pts   ', style: TextStyle(fontSize: 15.0, color: currentTheme.splashColor)),
+                              ],
+                            ),
+                            Row(
+                              children: <Widget>[
                                 Text('${widget.post.numComments}', style: currentTheme.textTheme.headline4),
                                 Text(' comments', style: TextStyle(fontSize: 15.0, color: currentTheme.splashColor)),
                               ],
                             ),
-                            Text('${widget.post.time}', style: currentTheme.textTheme.headline4),
                             FlatButton(
                               padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
                               onPressed: (){},
@@ -132,6 +193,7 @@ class _postWidgetState extends State<postWidget> {
                                   setState(() {
                                     if(upvoted){
                                       upvoted = false;
+                                      widget.post.score--;
                                       vote(widget.post.id, 0);
                                     }else{
                                       upvoted = true;
@@ -149,6 +211,7 @@ class _postWidgetState extends State<postWidget> {
                                 onTap: (){
                                   setState(() {
                                     if(downvoted){
+                                      widget.post.score++;
                                       downvoted = false;
                                       vote(widget.post.id, 0);
                                     }else{
@@ -181,9 +244,7 @@ class _postWidgetState extends State<postWidget> {
                             Container(
                               child: InkWell(
                                 onTap: (){
-                                   AlertDialog(
-                                    // TODO
-                                  );
+                                   showPostOptions(widget.post);
                                 },
                                 child: Icon(Icons.clear_all, size: 35, color: currentTheme.splashColor),
                               ),
@@ -209,7 +270,7 @@ Widget postImage(Post p){
       return ClipRRect(
           child: FadeInImage(
             image: NetworkImage(p.imageURL),
-            placeholder: AssetImage("assets/images/imagePlaceholderNSFW.png"),
+            placeholder: AssetImage("assets/images/imagePlaceholder.png"),
             height: 250,
             fit: BoxFit.fill,
           )

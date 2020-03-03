@@ -8,6 +8,7 @@ class Post {
   String imageURL;
   String time;
   int numComments;
+  String url;
 
-  Post(this.id,this.authorName, this.imageURL, this.title, this.selftext, this.subreddit, this.score, this.numComments, this.time);
+  Post(this.id,this.authorName, this.imageURL, this.title, this.selftext, this.subreddit, this.score, this.numComments, this.time, this.url);
 }

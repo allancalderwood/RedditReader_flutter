@@ -90,7 +90,7 @@ class _MyProfileState extends State<MyProfile> {
                               ],
                             ),
                             Row(children: <Widget>[Text(widget.profile.username, style: currentTheme.textTheme.headline1,)],),
-                            SizedBox(height: 60,),
+                            SizedBox(height: 30,),
                             Card(
                               child: Padding(
                                 padding: EdgeInsets.all(15),

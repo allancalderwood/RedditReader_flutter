@@ -23,15 +23,32 @@ class SubredditPage extends StatefulWidget {
 }
 
 class _SubredditState extends State<SubredditPage> {
+  Widget currentPage;
+  String selected;
 
   @override
   initState(){
-    mustCallSuper;
+    currentPage = futurePostBuilder(_loadSubreddit());
+    selected = 'Hot';
+    super.initState();
+  }
+
+  changeSelected(String value){
+    setState(() {
+      selected = value;
+      if(selected=='Hot'){
+        currentPage = futurePostBuilder(_loadSubreddit());
+      }else if(selected=='New'){
+        currentPage = futurePostBuilder(_loadSubredditNew());
+      }else{
+        currentPage = futurePostBuilder(_loadSubredditTop());
+      }
+    });
   }
 
   Future<List<Post>> _loadSubreddit()async{
     Map<String, String> _headers = {'User-Agent':clientID,"Content-type": "application/x-www-form-urlencoded", 'Authorization':'Bearer ${User.token}'};
-    http.Response data = await http.get(Uri.encodeFull(callBaseURL+'/r/${widget.sub.name}.json'), headers: _headers);
+    http.Response data = await http.get(Uri.encodeFull(callBaseURL+'/r/${widget.sub.name}.json?limit=200'), headers: _headers);
     var jsonData = json.decode(data.body);
     List<Post> posts = [];
     if(jsonData['message']=='Unauthorized'){
@@ -41,6 +58,34 @@ class _SubredditState extends State<SubredditPage> {
       return posts;
     }
   }
+
+  Future<List<Post>> _loadSubredditNew()async{
+    Map<String, String> _headers = {'User-Agent':clientID,"Content-type": "application/x-www-form-urlencoded", 'Authorization':'Bearer ${User.token}'};
+    http.Response data = await http.get(Uri.encodeFull(callBaseURL+'/r/${widget.sub.name}/new/.json?limit=200'), headers: _headers);
+    var jsonData = json.decode(data.body);
+    List<Post> posts = [];
+    if(jsonData['message']=='Unauthorized'){
+      refreshTokenAsync().then((value) => _loadSubreddit());
+    }else{
+      postFactory(jsonData, posts);
+      return posts;
+    }
+  }
+
+  Future<List<Post>> _loadSubredditTop()async{
+    Map<String, String> _headers = {'User-Agent':clientID,"Content-type": "application/x-www-form-urlencoded", 'Authorization':'Bearer ${User.token}'};
+    http.Response data = await http.get(Uri.encodeFull(callBaseURL+'/r/${widget.sub.name}/top/.json?limit=200&t=all'), headers: _headers);
+    var jsonData = json.decode(data.body);
+    List<Post> posts = [];
+    if(jsonData['message']=='Unauthorized'){
+      refreshTokenAsync().then((value) => _loadSubreddit());
+    }else{
+      postFactory(jsonData, posts);
+      return posts;
+    }
+  }
+
+
   // content of the screen
   @override
   Widget build(BuildContext context) {
@@ -89,6 +134,30 @@ class _SubredditState extends State<SubredditPage> {
                               Text(
                                 'R/${widget.sub.name}', style: currentTheme.textTheme.headline1,
                               ),
+                              SizedBox(
+                                width: 50,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(30.0),
+                                  color: currentTheme.accentColor,
+                                ),
+                                padding: EdgeInsets.fromLTRB(10, 1, 10, 1),
+                                child: DropdownButtonHideUnderline(
+                                  child: new DropdownButton<String>(
+                                    value: selected,
+                                    items: <String>['Hot', 'Top', 'New'].map((String value) {
+                                      return new DropdownMenuItem<String>(
+                                        value: value,
+                                        child: new Text(value, style: currentTheme.textTheme.bodyText1),
+                                      );
+                                    }).toList(),
+                                    onChanged: (value) {
+                                      changeSelected(value);;
+                                    },
+                                  ),
+                                )
+                              )
                             ],
                           ),
                           Padding(
@@ -99,7 +168,9 @@ class _SubredditState extends State<SubredditPage> {
                             ),
                           ),
                           SizedBox(height: 10),
-                          futurePostBuilder(_loadSubreddit())
+                          Container(
+                            child: currentPage,
+                          )
                         ]),
                   )
                 ],

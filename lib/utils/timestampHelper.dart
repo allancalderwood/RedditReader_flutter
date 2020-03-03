@@ -8,13 +8,10 @@ String readTimestamp(int timestamp) {
   var time = '';
 
   if (diff.inSeconds <= 0 || diff.inSeconds > 0 && diff.inMinutes == 0 || diff.inMinutes > 0 && diff.inHours == 0) {
-    if(diff.inMinutes==0){
-      time = 'Now';
-    }
      if(diff.inMinutes > 0 && diff.inHours == 0){
       time = '${diff.inMinutes.toString()}m';
     }else{
-       time = '${diff.inHours.toString()}h';
+       time = 'Now';
      }
   } else if(diff.inHours > 0 && diff.inDays == 0){
     time = '${diff.inHours.toString()}h';

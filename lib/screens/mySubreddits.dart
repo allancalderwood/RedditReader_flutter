@@ -34,7 +34,6 @@ class _MySubredditsState extends State<MySubreddits> {
     http.Response data = await http.get(Uri.encodeFull(callBaseURL+'/subreddits/mine/subscriber.json?limit=1000'), headers: getHeader());
     var jsonData = json.decode(data.body);
     List<Subreddit> subs = [];
-    print('RR: Subs: $jsonData');
     if(jsonData['message']=='Unauthorized'){
       refreshTokenAsync().then((value) => _loadSubs());
     }else{

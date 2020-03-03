@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'dart:convert';
-import 'package:redditreader_flutter/models/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:redditreader_flutter/models/post.dart';
 import 'package:redditreader_flutter/models/subreddit.dart';
@@ -17,7 +16,7 @@ Widget futurePostBuilder(Future<List<Post>> future){
   final scrollController = ScrollController();
   scrollController.addListener(() {
     if(scrollController.position.maxScrollExtent == scrollController.offset){
-      print('RR: REACHED END OF PAGE');
+      // TODO load more posts
     }
   });
 

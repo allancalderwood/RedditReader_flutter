@@ -21,7 +21,7 @@ ThemeData buildDefaultTheme() {
         headline4: TextStyle(fontSize: 15.0, color: Colors.white),
         headline5: TextStyle(fontSize: 13.0, color: const Color(0xff1FCCB7)),
         bodyText1: TextStyle(fontSize: 14.0, color: Colors.white),
-        bodyText2: TextStyle(fontSize: 14.0, color: Color(0xff1C1C1C)),
+        bodyText2: TextStyle(fontSize: 14.0, color: Color(0xff525252)),
       ),
 
       // AppBar Theme

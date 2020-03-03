@@ -7,7 +7,6 @@ import 'package:redditreader_flutter/styles/inputDecoration.dart';
 import 'package:redditreader_flutter/utils/postFactory.dart';
 import 'package:redditreader_flutter/widgets/postBuilder.dart';
 import 'package:redditreader_flutter/utils/redditAPI.dart';
-import 'package:redditreader_flutter/utils/timestampHelper.dart';
 import 'package:redditreader_flutter/widgets/drawer.dart';
 import '../styles/theme.dart'; // import theme of app
 import '../widgets/appBar.dart';
@@ -34,8 +33,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<List<Post>> _loadHome()async{
-    Map<String, String> _headers = {'User-Agent':clientID,"Content-type": "application/x-www-form-urlencoded", 'Authorization':'Bearer ${User.token}'};
-    http.Response data = await http.get(Uri.encodeFull(callBaseURL+'/.json'), headers: _headers);
+    http.Response data = await http.get(Uri.encodeFull(callBaseURL+'/.json'), headers: headers);
     var jsonData = json.decode(data.body);
     List<Post> posts = [];
     if(jsonData['message']=='Unauthorized'){
@@ -47,8 +45,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<List<Post>> _loadPopular() async{  // TODO
-    Map<String, String> _headers = {'User-Agent':clientID,"Content-type": "application/x-www-form-urlencoded", 'Authorization':'Bearer ${User.token}'};
-    http.Response data = await http.get(Uri.encodeFull(callBaseURL+'/best'), headers: _headers);
+    http.Response data = await http.get(Uri.encodeFull(callBaseURL+'/best'), headers: headers);
     var jsonData = json.decode(data.body);
     List<Post> posts = [];
     if(jsonData['message']=='Unauthorized'){

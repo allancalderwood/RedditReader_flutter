@@ -1,6 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:redditreader_flutter/screens/login.dart';
+import 'package:redditreader_flutter/screens/myProfile.dart';
+import 'package:redditreader_flutter/screens/mySaved.dart';
+import 'package:redditreader_flutter/screens/mySubreddits.dart';
 import '../styles/theme.dart';
 import '../models/user.dart';
 
@@ -78,12 +81,30 @@ class _RedditReaderDrawer extends State<RedditReaderDrawer> {
             )
           ),
           ListTile(
+            onTap: (){
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MyProfile())
+              );
+            },
             title: Text('View my profile'),
           ),
           ListTile(
+            onTap: (){
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MySubreddits())
+              );
+            },
             title: Text('My Subreddits'),
           ),
           ListTile(
+            onTap: (){
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MySaved())
+              );
+            },
             title: Text('My Saved posts'),
           ),
           Expanded(

@@ -77,8 +77,7 @@ class _postWidgetState extends State<postWidget> {
   }
 
   void goToSubreddit(Post p){
-    Map<String, String> _headers = {'User-Agent':clientID,"Content-type": "application/x-www-form-urlencoded", 'Authorization':'Bearer ${User.token}'};
-    http.get(Uri.encodeFull(callBaseURL+'/r/${widget.post.subreddit}/about.json'), headers: _headers).then((response) => _loadSubreddit(response));
+    http.get(Uri.encodeFull(callBaseURL+'/r/${widget.post.subreddit}/about.json'), headers: headers).then((response) => _loadSubreddit(response));
   }
 
   void showPostOptions(Post post){

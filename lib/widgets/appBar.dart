@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'file:///C:/Users/allan/AndroidStudioProjects/redditreader_flutter/lib/styles/theme.dart';
+import 'package:redditreader_flutter/screens/homePage.dart';
 
 class RedditReaderAppBar extends StatefulWidget implements PreferredSizeWidget {
   RedditReaderAppBar({Key key}) : preferredSize = Size.fromHeight(kToolbarHeight), super(key: key);
@@ -24,7 +25,12 @@ class _RedditReaderAppBarState extends State<RedditReaderAppBar>{
       ),
       actions: <Widget>[
         new IconButton(
-          onPressed: (){},
+          onPressed: (){
+            Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HomePage())
+            );
+          },
           icon: Image.asset('assets/images/logo.png'),
         )
       ],

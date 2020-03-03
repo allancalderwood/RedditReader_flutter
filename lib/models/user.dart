@@ -1,10 +1,14 @@
+import 'package:flutter/material.dart';
 import 'package:redditreader_flutter/main.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:redditreader_flutter/utils/redditAPI.dart';
 
 class User {
   static String _token = '';
   static String _username = 'Username';
   static String _profileURL = 'https://www.redditstatic.com/avatars/avatar_default_03_FFB000.png';
+  static Image _backgroundURL;
   static int _karma = 0;
   static int _accountAge = 1;
   static String _accountAgePostfix = ' days old';
@@ -74,6 +78,7 @@ class User {
     _token = '';
     _username = 'Username';
     _profileURL = 'https://www.redditstatic.com/avatars/avatar_default_03_FFB000.png';
+    _profileURL = '';
     _karma = 0;
     _accountAge = 1;
     _accountAgePostfix = ' days old';

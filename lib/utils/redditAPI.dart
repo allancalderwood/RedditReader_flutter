@@ -14,8 +14,10 @@ final  String _scope = 'identity edit flair history modconfig modflair modlog mo
 final  String tokenBaseURL = 'https://www.reddit.com/api/v1/access_token';
 final  String _userAgent = 'android:com.redditreader.redditreader_flutter:v.1 (by /u/AllanCalderwood)';
 final  String callBaseURL = "https://oauth.reddit.com";
-final Map<String, String> headers = {'User-Agent':clientID,"Content-type": "application/x-www-form-urlencoded", 'Authorization':'Bearer ${User.token}'};
 
+Map<String, String> getHeader(){
+  return {'User-Agent':clientID,"Content-type": "application/x-www-form-urlencoded", 'Authorization':'Bearer ${User.token}'};
+}
 
 
 // Method for returning the URL for users to authorize the app

@@ -79,11 +79,11 @@ class _postWidgetState extends State<postWidget> {
   }
 
   void goToSubreddit(Post p){
-    http.get(Uri.encodeFull(callBaseURL+'/r/${widget.post.subreddit}/about.json'), headers: headers).then((response) => _loadSubreddit(response));
+    http.get(Uri.encodeFull(callBaseURL+'/r/${widget.post.subreddit}/about.json'), headers: getHeader()).then((response) => _loadSubreddit(response));
   }
 
   void goToUser(Post p)async{
-    http.Response response = await http.get(Uri.encodeFull(callBaseURL+'/user/${p.authorName}/about.json'), headers: headers);
+    http.Response response = await http.get(Uri.encodeFull(callBaseURL+'/user/${p.authorName}/about.json'), headers: getHeader());
     var jsonData = json.decode(response.body);
     var userData = jsonData['data'];
     var karma = ( (userData['link_karma']) + (userData['comment_karma']));
@@ -328,8 +328,8 @@ Widget postImage(Post p){
           child: FadeInImage(
             image: NetworkImage(p.imageURL),
             placeholder: NetworkImage(p.imageURLPreview),
-            height: imgHeight(p.imageHeight),//(p.imageHeight>500) ? ((p.imageHeight.toDouble()) /2) : p.imageHeight.toDouble(),
-            width: imgWidth(p.imageWidth), //(p.imageHeight>500) ? ((p.imageWidth.toDouble()) /2) : p.imageWidth.toDouble(),
+            height: imgHeight(p.imageHeight),
+            width: imgWidth(p.imageWidth),
             fit: BoxFit.fill,
           )
       );
@@ -352,7 +352,11 @@ Widget postImage(Post p){
 }
 
 double imgHeight(int height){
-  if(height>1000){
+  if (height==null){return 10.0;}
+  if(height>2000){
+    return height.toDouble()/8;
+  }
+  else if(height>1000 && height<=2000){
     return height.toDouble()/4;
   }else if(height<=1000 && height>600){
     return height.toDouble()/3;
@@ -363,7 +367,11 @@ double imgHeight(int height){
 }
 
 double imgWidth(int width){
-  if(width>1000){
+  if (width==null){return 10.0;}
+  if(width>2000){
+    return width.toDouble()/8;
+  }
+  else if(width>1000 && width<=2000){
     return width.toDouble()/4;
   }else if(width<=1000 && width>600){
     return width.toDouble()/3;

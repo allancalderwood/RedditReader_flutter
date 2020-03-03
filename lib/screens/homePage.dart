@@ -33,7 +33,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<List<Post>> _loadHome()async{
-    http.Response data = await http.get(Uri.encodeFull(callBaseURL+'/.json'), headers: headers);
+    http.Response data = await http.get(Uri.encodeFull(callBaseURL+'/best'), headers: getHeader());
     var jsonData = json.decode(data.body);
     List<Post> posts = [];
     if(jsonData['message']=='Unauthorized'){
@@ -45,7 +45,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<List<Post>> _loadPopular() async{  // TODO
-    http.Response data = await http.get(Uri.encodeFull(callBaseURL+'/best'), headers: headers);
+    http.Response data = await http.get(Uri.encodeFull(callBaseURL+'/r/all/'), headers: getHeader());
     var jsonData = json.decode(data.body);
     List<Post> posts = [];
     if(jsonData['message']=='Unauthorized'){

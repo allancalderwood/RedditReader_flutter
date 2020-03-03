@@ -28,7 +28,7 @@ class _MyProfileState extends State<MyProfile> {
   }
 
   Future<List<Trophy>> _loadTrophies()async{
-    http.Response data = await http.get(Uri.encodeFull(callBaseURL+'/api/v1/user/${widget.profile.username}/trophies'), headers: headers);
+    http.Response data = await http.get(Uri.encodeFull(callBaseURL+'/api/v1/user/${widget.profile.username}/trophies'), headers: getHeader());
     var jsonData = json.decode(data.body);
     List<Trophy> trophies = [];
     if(jsonData['message']=='Unauthorized'){
@@ -76,8 +76,9 @@ class _MyProfileState extends State<MyProfile> {
                                         child: Container(
                                           decoration: BoxDecoration(
                                             image: DecorationImage(
-                                              image: CachedNetworkImageProvider(
+                                              image: NetworkImage(
                                                 widget.profile.profileURL,
+                                                headers: getHeader()
                                               ),
                                               fit: BoxFit.cover,
                                             ),
@@ -127,14 +128,21 @@ class _MyProfileState extends State<MyProfile> {
                               )
                             ),
                             SizedBox(height: 20,),
-                            (widget.current) ? futureTrophyBuilder(_loadTrophies()) : FlatButton(
-                              padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
-                              shape: new RoundedRectangleBorder(
-                                borderRadius: new BorderRadius.circular(12.0),
+                            (widget.current) ? futureTrophyBuilder(_loadTrophies()) : Container(
+                              child: Column(
+                                children: <Widget>[
+                                  SizedBox(height: 100,),
+                                  FlatButton(
+                                    padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
+                                    shape: new RoundedRectangleBorder(
+                                      borderRadius: new BorderRadius.circular(12.0),
+                                    ),
+                                    color: currentTheme.primaryColor,
+                                    onPressed: (){},
+                                    child: Text('Message ${widget.profile.username}'),
+                                  )
+                                ],
                               ),
-                              color: currentTheme.primaryColor,
-                              onPressed: (){},
-                              child: Text('Message ${widget.profile.username}'),
                             ),
                           ],
                         ),

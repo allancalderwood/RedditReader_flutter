@@ -27,7 +27,17 @@ Widget futureTrophyBuilder(Future<List<Trophy>> future){
         );
         default:
           if (snapshot.hasError)
-            return new Text('Error: ${snapshot.error}', style:currentTheme.textTheme.headline2,);
+            return Column(
+            children: <Widget>[
+              SizedBox(height: 30,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text("Can't load Trophies right now.", style: currentTheme.textTheme.headline2,)
+                ],
+              ),
+            ],
+          );
           else
             return Card(
               child: Padding(

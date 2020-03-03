@@ -37,6 +37,11 @@ class _MySubredditsState extends State<MySubreddits> {
         body: Padding(
             padding: EdgeInsets.all(20),
             child: Center(
+              child: Column(
+                children: <Widget>[
+                  Text('Your Subreddits', style: currentTheme.textTheme.headline1,)
+                ],
+              ),
         ),
         )
     );

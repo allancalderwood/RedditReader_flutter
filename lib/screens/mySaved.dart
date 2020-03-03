@@ -37,6 +37,11 @@ class _MySavedState extends State<MySaved> {
         body: Padding(
             padding: EdgeInsets.all(20),
             child: Center(
+              child: Column(
+                children: <Widget>[
+                  Text('Your Saved Posts', style: currentTheme.textTheme.headline1,)
+                ],
+              ),
         ),
         )
     );

@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:redditreader_flutter/models/userOther.dart';
 import 'package:redditreader_flutter/screens/login.dart';
 import 'package:redditreader_flutter/screens/myProfile.dart';
 import 'package:redditreader_flutter/screens/mySaved.dart';
 import 'package:redditreader_flutter/screens/mySubreddits.dart';
+import 'package:redditreader_flutter/utils/slides.dart';
 import '../styles/theme.dart';
 import '../models/user.dart';
 
@@ -82,28 +84,22 @@ class _RedditReaderDrawer extends State<RedditReaderDrawer> {
           ),
           ListTile(
             onTap: (){
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => MyProfile())
-              );
+              Route route = SlideLeft(builder: (context) => MyProfile(profile: new UserOther(User.username, User.profileURL, User.karma, User.accountAge, User.accountAgePostfix), current: true,));
+              Navigator.push(context, route);
             },
             title: Text('View my profile'),
           ),
           ListTile(
             onTap: (){
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => MySubreddits())
-              );
+              Route route = SlideLeft(builder: (context) => MySubreddits());
+              Navigator.push(context, route);
             },
             title: Text('My Subreddits'),
           ),
           ListTile(
             onTap: (){
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => MySaved())
-              );
+              Route route = SlideLeft(builder: (context) => MySaved());
+              Navigator.push(context, route);
             },
             title: Text('My Saved posts'),
           ),

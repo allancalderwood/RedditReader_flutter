@@ -6,6 +6,8 @@ import 'package:redditreader_flutter/models/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:redditreader_flutter/models/post.dart';
 import 'package:redditreader_flutter/models/subreddit.dart';
+import 'package:redditreader_flutter/models/userOther.dart';
+import 'package:redditreader_flutter/screens/myProfile.dart';
 import 'package:redditreader_flutter/screens/subredditPage.dart';
 import 'package:redditreader_flutter/styles/theme.dart';
 import 'package:redditreader_flutter/utils/redditAPI.dart';
@@ -79,6 +81,40 @@ class _postWidgetState extends State<postWidget> {
   void goToSubreddit(Post p){
     http.get(Uri.encodeFull(callBaseURL+'/r/${widget.post.subreddit}/about.json'), headers: headers).then((response) => _loadSubreddit(response));
   }
+
+  void goToUser(Post p)async{
+    http.Response response = await http.get(Uri.encodeFull(callBaseURL+'/user/${p.authorName}/about.json'), headers: headers);
+    var jsonData = json.decode(response.body);
+    var userData = jsonData['data'];
+    var karma = ( (userData['link_karma']) + (userData['comment_karma']));
+    print('RR: ${userData['icon_img'].toString()}');
+    int seconds = ( userData['created'] /10).floor();
+    int daysSince = (seconds/86400).floor();
+    var age;
+    String message = 'days old';
+
+    if(daysSince>30 && daysSince<365){
+      daysSince =  (daysSince/30).floor();
+      age = daysSince.floor().toInt();
+      message =  'mnths old';
+    }
+    else if(daysSince>365){
+      daysSince =  (daysSince/365).floor();
+      age = daysSince.floor().toInt();
+      message = 'yr old';
+    }else{
+      age = daysSince.floor().toInt();
+    }
+    var accountAge = age;
+    var accountAgePostfix = message;
+
+    UserOther profile = new UserOther(userData['name'], userData['icon_img'].toString(), karma, accountAge, accountAgePostfix);
+    Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MyProfile(profile: profile, current: false,))
+    );
+  }
+
 
   void showPostOptions(Post post){
     showDialog<Null>(
@@ -196,7 +232,7 @@ class _postWidgetState extends State<postWidget> {
                             ),
                             FlatButton(
                               padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                              onPressed: (){},
+                              onPressed: (){goToUser(widget.post);},
                               shape: new RoundedRectangleBorder(
                                 borderRadius: new BorderRadius.circular(50.0),
                               ),

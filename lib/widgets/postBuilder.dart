@@ -14,6 +14,13 @@ import 'package:redditreader_flutter/utils/redditAPI.dart';
 import 'package:share/share.dart';
 
 Widget futurePostBuilder(Future<List<Post>> future){
+  final scrollController = ScrollController();
+  scrollController.addListener(() {
+    if(scrollController.position.maxScrollExtent == scrollController.offset){
+      print('RR: REACHED END OF PAGE');
+    }
+  });
+
   return FutureBuilder<List<Post>>(
     future: future,
     builder: (context, snapshot){
@@ -32,6 +39,7 @@ Widget futurePostBuilder(Future<List<Post>> future){
             return Container(
               height: 650,
               child: ListView.builder(
+                controller: scrollController,
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 itemCount: snapshot.data.length,
@@ -57,6 +65,7 @@ class _postWidgetState extends State<postWidget> {
   bool liked;
   bool upvoted;
   bool downvoted;
+  final scrollController = ScrollController();
 
   @override
   void initState() {

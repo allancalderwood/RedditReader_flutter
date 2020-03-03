@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -83,6 +85,19 @@ class _HomePageState extends State<HomePage> {
   void search(){
   }
 
+  Future<void> _refresh(){
+    Completer<Null> c = new Completer<Null>();
+    setState((){
+      if(homepage){
+        currentPage=futurePostBuilder(_loadHome());
+      } else{
+        currentPage=futurePostBuilder(_loadPopular());
+      }
+    });
+    c.complete();
+    return c.future;
+  }
+
   // content of the screen
   @override
   Widget build(BuildContext context) {
@@ -118,7 +133,9 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     SizedBox(height: 10),
-                    Container(
+                    RefreshIndicator(
+                      color: currentTheme.primaryColor,
+                      onRefresh: _refresh,
                       child: currentPage,
                     ),
                 ])

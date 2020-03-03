@@ -6,6 +6,7 @@ import 'package:redditreader_flutter/models/subreddit.dart';
 import 'package:redditreader_flutter/models/user.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:redditreader_flutter/styles/inputDecoration.dart';
+import 'package:redditreader_flutter/utils/postFactory.dart';
 import 'package:redditreader_flutter/widgets/postBuilder.dart';
 import 'package:redditreader_flutter/utils/redditAPI.dart';
 import 'package:redditreader_flutter/utils/timestampHelper.dart';
@@ -36,12 +37,7 @@ class _SubredditState extends State<SubredditPage> {
     if(jsonData['message']=='Unauthorized'){
       refreshTokenAsync().then((value) => _loadSubreddit());
     }else{
-      for(var p in jsonData['data']['children']){
-        double t = p['data']['created_utc'];
-        String time = readTimestamp(t.toInt());
-        Post post = new Post(p['data']['name'],p['data']['author_fullname'], p['data']['url'],p['data']['thumbnail'], p['data']['title'],p['data']['selftext'], p['data']['subreddit'], p['data']['score'],p['data']['num_comments'], time, p['data']['permalink']);
-        posts.add(post);
-      }
+      postFactory(jsonData, posts);
       return posts;
     }
   }
@@ -57,10 +53,12 @@ class _SubredditState extends State<SubredditPage> {
           child: Center(
               child: Stack(
                 children: <Widget>[
-                  Image.network(
-                    widget.sub.headerUrl,
-                    fit: BoxFit.fill,
+                  new CachedNetworkImage(
                     height: 300,
+                    imageUrl: widget.sub.headerUrl,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => new CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => new Container(height: 300, decoration: BoxDecoration(color: currentTheme.primaryColor),),
                   ),
                   Container(
                     height: 300,

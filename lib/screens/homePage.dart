@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:redditreader_flutter/models/post.dart';
 import 'package:redditreader_flutter/models/user.dart';
 import 'package:redditreader_flutter/styles/inputDecoration.dart';
+import 'package:redditreader_flutter/utils/postFactory.dart';
 import 'package:redditreader_flutter/widgets/postBuilder.dart';
 import 'package:redditreader_flutter/utils/redditAPI.dart';
 import 'package:redditreader_flutter/utils/timestampHelper.dart';
@@ -40,12 +41,7 @@ class _HomePageState extends State<HomePage> {
     if(jsonData['message']=='Unauthorized'){
       refreshTokenAsync().then((value) => _loadHome());
     }else{
-      for(var p in jsonData['data']['children']){
-        double t = p['data']['created_utc'];
-        String time = readTimestamp(t.toInt());
-        Post post = new Post(p['data']['name'],p['data']['author_fullname'], p['data']['url'],p['data']['thumbnail'], p['data']['title'],p['data']['selftext'], p['data']['subreddit'], p['data']['score'],p['data']['num_comments'], time, p['data']['permalink']);
-        posts.add(post);
-      }
+      postFactory(jsonData, posts);
       return posts;
     }
   }
@@ -58,12 +54,7 @@ class _HomePageState extends State<HomePage> {
     if(jsonData['message']=='Unauthorized'){
       refreshTokenAsync().then((value) => _loadHome());
     }else{
-      for(var p in jsonData['data']['children']){
-        double t = p['data']['created_utc'];
-        String time = readTimestamp(t.toInt());
-        Post post = new Post(p['data']['name'],p['data']['author_fullname'], p['data']['url'],p['data']['thumbnail'], p['data']['title'],p['data']['selftext'], p['data']['subreddit'], p['data']['score'],p['data']['num_comments'], time, p['data']['url']);
-        posts.add(post);
-      }
+      postFactory(jsonData, posts);
       return posts;
     }
   }

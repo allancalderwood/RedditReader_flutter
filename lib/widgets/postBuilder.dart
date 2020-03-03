@@ -293,7 +293,8 @@ Widget postImage(Post p){
           child: FadeInImage(
             image: NetworkImage(p.imageURL),
             placeholder: NetworkImage(p.imageURLPreview),
-            height: 250,
+            height: imgHeight(p.imageHeight),//(p.imageHeight>500) ? ((p.imageHeight.toDouble()) /2) : p.imageHeight.toDouble(),
+            width: imgWidth(p.imageWidth), //(p.imageHeight>500) ? ((p.imageWidth.toDouble()) /2) : p.imageWidth.toDouble(),
             fit: BoxFit.fill,
           )
       );
@@ -313,4 +314,25 @@ Widget postImage(Post p){
       child: Text('${p.selftext}', maxLines:8, overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: 13.0, color: currentTheme.splashColor)),
     ),
   );
+}
+
+double imgHeight(int height){
+  if(height>1000){
+    return height.toDouble()/4;
+  }else if(height<=1000 && height>600){
+    return height.toDouble()/3;
+  }else if(height<=600 && height>400){
+    return height.toDouble()/2;
+  }else return height.toDouble();
+
+}
+
+double imgWidth(int width){
+  if(width>1000){
+    return width.toDouble()/4;
+  }else if(width<=1000 && width>600){
+    return width.toDouble()/3;
+  }else if(width<=600 && width>400){
+    return width.toDouble()/2;
+  }else return width.toDouble();
 }

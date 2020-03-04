@@ -162,7 +162,14 @@ void unsave(String id)async{
 
 void subscribe(String sr, String action)async{
   bool skipDefaults = true;
+  String _body;
+  if(action=='unsub'){
+    _body = "action=$action&sr_name=${sr}";
+  }else{
+    _body = "action=$action&skip_initial_defaults=$skipDefaults&sr_name=${sr}";
+  }
   Map<String, String> _headers = {'User-Agent':clientID,"Content-type": "application/x-www-form-urlencoded", 'Authorization':'Bearer ${User.token}'};
-  String _body = "action=$action&skip_initial_defaults=$skipDefaults&sr_name=${sr}";
   http.Response response = await http.post(Uri.encodeFull(callBaseURL+'/api/subscribe'), headers: _headers, body: _body);
+  var jsonData = json.decode(response.body);
+  print('RR: RESPONSE: $jsonData');
 }

@@ -109,43 +109,45 @@ class _HomePageState extends State<HomePage> {
      return Scaffold(
         appBar: RedditReaderAppBar(),
         drawer: RedditReaderDrawer(),
-        body: Padding(
-            padding: EdgeInsets.all(20),
-            child: Center(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Row(
+        body:Column(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.all(20),
+              child: Center(
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        FlatButton(
-                            //padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
-                            onPressed: homeClick,
-                            child: Text('Homepage', style: homeText)
-                        ),
-                        FlatButton(
-                            //padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
-                            onPressed: popularClick,
-                            child:
+                        Row(
+                          children: <Widget>[
+                            FlatButton(
+                                onPressed: homeClick,
+                                child: Text('Homepage', style: homeText)
+                            ),
+                            FlatButton(
+                              onPressed: popularClick,
+                              child:
                               Text('Popular', style: popularText),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 20.00, 0, 15.00),
-                      child: TextField(
-                        onSubmitted: (value){_search(value);},
-                        maxLines: 1,
-                        decoration: buildInputDecoration("Search...",true,Icon(Icons.search)),
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    RefreshIndicator(
-                      color: currentTheme.primaryColor,
-                      onRefresh: _refresh,
-                      child: currentPage,
-                    ),
-                ])
-        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 20.00, 0, 15.00),
+                          child: TextField(
+                            onSubmitted: (value){_search(value);},
+                            maxLines: 1,
+                            decoration: buildInputDecoration("Search...",true,Icon(Icons.search)),
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                      ])
+              ),
+            ),
+            RefreshIndicator(
+              color: currentTheme.primaryColor,
+              onRefresh: _refresh,
+              child: currentPage,
+            ),
+          ],
         )
     );
   }

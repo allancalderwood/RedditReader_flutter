@@ -149,125 +149,129 @@ class _SubredditState extends State<SubredditPage> {
         body: Padding(
           padding: EdgeInsets.fromLTRB(0,0,0,0),
           child: Center(
-              child: Stack(
-                children: <Widget>[
-                  new CachedNetworkImage(
-                    height: 300,
-                    imageUrl: widget.sub.headerUrl,
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => new CircularProgressIndicator(),
-                    errorWidget: (context, url, error) => new Container(height: 300, decoration: BoxDecoration(color: Colors.red),),
-                  ),
-                  Container(
-                    height: 300,
-                    decoration: BoxDecoration(
-                      color: Color(0xFF0E3311).withOpacity(0.2)
+            child: Column(
+              children: <Widget>[
+                Stack(
+                  children: <Widget>[
+                    new CachedNetworkImage(
+                      height: 300,
+                      imageUrl: widget.sub.headerUrl,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => new CircularProgressIndicator(),
+                      errorWidget: (context, url, error) => new Container(height: 300, decoration: BoxDecoration(color: Colors.red),),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(20,100,20,20),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(100.0),
-                                child: new CachedNetworkImage(
-                                  height: 50,
-                                  width: 50,
-                                  imageUrl: widget.sub.iconUrl,
-                                  placeholder: (context, url) => new CircularProgressIndicator(),
-                                  errorWidget: (context, url, error) => new Icon(Icons.supervised_user_circle),
-                                )
-                              ),
-                              SizedBox(
-                                width: 20,
-                              ),
-                              Text(
-                                'R/${widget.sub.name}', style: currentTheme.textTheme.headline1, overflow: TextOverflow.ellipsis,
-                              ),
-                              SizedBox(
-                                width: 50,
-                              ),
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 20.00, 0, 15.00),
-                            child: TextField(
-                              onSubmitted: (value){_search(value);},
-                              maxLines: 1,
-                              decoration: buildInputDecoration("Search...",true,Icon(Icons.search)),
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          Container(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                    Container(
+                      height: 300,
+                      decoration: BoxDecoration(
+                          color: Color(0xFF0E3311).withOpacity(0.2)
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(20,100,20,0),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Row(
                               children: <Widget>[
-                                Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(30.0),
-                                      color: Colors.transparent,
-                                    ),
-                                    padding: EdgeInsets.fromLTRB(10, 1, 10, 1),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        DropdownButtonHideUnderline(
-                                          child: new DropdownButton<String>(
-                                            value: selected,
-                                            items: <String>['Hot', 'Top', 'New'].map((String value) {
-                                              return new DropdownMenuItem<String>(
-                                                value: value,
-                                                child: new Text(value, style: currentTheme.textTheme.bodyText1),
-                                              );
-                                            }).toList(),
-                                            onChanged: (value) {
-                                              changeSelected(value);
-                                            },
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 25,
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(15.0),
-                                              color: subbed? Colors.grey:currentTheme.primaryColor,
-                                            ),
-                                            child: FlatButton(
-                                              onPressed: (){
-                                                setState(() {
-                                                  if(subbed){
-                                                    subbed = false;
-                                                    subStatus = 'Subscribe';
-                                                    subscribe(widget.sub.name, 'unsub');
-                                                  }else{
-                                                    subbed = true;
-                                                    subStatus = 'Subscribed';
-                                                    subscribe(widget.sub.name, 'sub');
-                                                  }
-                                                });
-                                              },
-                                              child: Text(subStatus),
-                                            ),
-                                          ),
-                                        )
-                                      ],
+                                ClipRRect(
+                                    borderRadius: BorderRadius.circular(100.0),
+                                    child: new CachedNetworkImage(
+                                      height: 50,
+                                      width: 50,
+                                      imageUrl: widget.sub.iconUrl,
+                                      placeholder: (context, url) => new CircularProgressIndicator(),
+                                      errorWidget: (context, url, error) => new Icon(Icons.supervised_user_circle),
                                     )
                                 ),
-                                RefreshIndicator(
-                                  color: currentTheme.primaryColor,
-                                  onRefresh: _refresh,
-                                  child: currentPage,
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                Text(
+                                  'R/${widget.sub.name}', style: currentTheme.textTheme.headline1, overflow: TextOverflow.ellipsis,
+                                ),
+                                SizedBox(
+                                  width: 50,
                                 ),
                               ],
                             ),
-                          )
-                        ]),
-                  )
-                ],
-              )
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 20.00, 0, 15.00),
+                              child: TextField(
+                                onSubmitted: (value){_search(value);},
+                                maxLines: 1,
+                                decoration: buildInputDecoration("Search...",true,Icon(Icons.search)),
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Container(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(30.0),
+                                        color: Colors.transparent,
+                                      ),
+                                      padding: EdgeInsets.fromLTRB(10, 1, 10, 1),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          DropdownButtonHideUnderline(
+                                            child: new DropdownButton<String>(
+                                              value: selected,
+                                              items: <String>['Hot', 'Top', 'New'].map((String value) {
+                                                return new DropdownMenuItem<String>(
+                                                  value: value,
+                                                  child: new Text(value, style: currentTheme.textTheme.bodyText1),
+                                                );
+                                              }).toList(),
+                                              onChanged: (value) {
+                                                changeSelected(value);
+                                              },
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 25,
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(15.0),
+                                                color: subbed? Colors.grey:currentTheme.primaryColor,
+                                              ),
+                                              child: FlatButton(
+                                                onPressed: (){
+                                                  setState(() {
+                                                    if(subbed){
+                                                      subbed = false;
+                                                      subStatus = 'Subscribe';
+                                                      subscribe(widget.sub.name, 'unsub');
+                                                    }else{
+                                                      subbed = true;
+                                                      subStatus = 'Subscribed';
+                                                      subscribe(widget.sub.name, 'sub');
+                                                    }
+                                                  });
+                                                },
+                                                child: Text(subStatus),
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      )
+                                  ),
+                                ],
+                              ),
+                            )
+                          ]),
+                    )
+                  ],
+                ),
+                RefreshIndicator(
+                  color: currentTheme.primaryColor,
+                  onRefresh: _refresh,
+                  child: currentPage,
+                )
+              ],
+            )
           ),
         )
     );

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -11,7 +13,6 @@ import 'package:redditreader_flutter/widgets/postBuilder.dart';
 import 'package:redditreader_flutter/utils/redditAPI.dart';
 import 'package:redditreader_flutter/widgets/drawer.dart';
 import 'package:redditreader_flutter/widgets/subBuilder.dart';
-import 'package:redditreader_flutter/widgets/subSearchBuilder.dart';
 import 'package:redditreader_flutter/widgets/userSearchBuilder.dart';
 
 import '../styles/theme.dart'; // import theme of app
@@ -25,9 +26,77 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  bool subs;
+  bool users;
+  bool posts;
+  Widget currentPage;
+  TextStyle postText = currentTheme.textTheme.headline1;
+  TextStyle usersText = TextStyle(fontSize: 26.0,color: currentTheme.primaryColor);
+  TextStyle subsText = TextStyle(fontSize: 26.0,color: currentTheme.primaryColor);
 
   @override
   initState(){
+     subs = false;
+     users = false;
+     posts = true;
+     currentPage = futurePostBuilder(_loadPosts());
+  }
+
+  void postsClick(){
+    if(!posts){
+      posts=true;
+      users=false;
+      subs = false;
+      setState(() {
+        postText = currentTheme.textTheme.headline1;
+        usersText = TextStyle(fontSize: 26.0,color: currentTheme.primaryColor);
+        subsText = TextStyle(fontSize: 26.0,color: currentTheme.primaryColor);
+        currentPage = futurePostBuilder(_loadPosts());
+      });
+    }
+  }
+
+  void subsClick(){
+    if(!subs){
+      subs=true;
+      users=false;
+      posts = false;
+      setState(() {
+        subsText = currentTheme.textTheme.headline1;
+        usersText = TextStyle(fontSize: 26.0,color: currentTheme.primaryColor);
+        postText = TextStyle(fontSize: 26.0,color: currentTheme.primaryColor);
+        currentPage = futureSubBuilder(_loadSubs());
+      });
+    }
+  }
+
+  void usersClick(){
+    if(!users){
+      users=true;
+      subs=false;
+      posts = false;
+      setState(() {
+        usersText = currentTheme.textTheme.headline1;
+        subsText = TextStyle(fontSize: 26.0,color: currentTheme.primaryColor);
+        postText = TextStyle(fontSize: 26.0,color: currentTheme.primaryColor);
+        currentPage = futureUserSearchBuilder(_loadUsers());
+      });
+    }
+  }
+
+  Future<void> _refresh(){
+    Completer<Null> c = new Completer<Null>();
+    setState((){
+      if(users){
+        currentPage = futureUserSearchBuilder(_loadUsers());
+      } else if(posts){
+        currentPage = futurePostBuilder(_loadPosts());
+      }else{
+        currentPage = futureSubBuilder(_loadSubs());
+      }
+    });
+    c.complete();
+    return c.future;
   }
 
   Future<List<Subreddit>> _loadSubs()async{
@@ -73,15 +142,42 @@ class _SearchPageState extends State<SearchPage> {
      return Scaffold(
         appBar: RedditReaderAppBar(),
         drawer: RedditReaderDrawer(),
-        body: Padding(
-            padding: EdgeInsets.all(20),
-            child: SingleChildScrollView(
-                child: Column(
-                  children: <Widget>[
-                    SizedBox(height: 10),
-                    Text('Results', style: currentTheme.textTheme.headline1,),
-                    SizedBox(height: 40),
-                    Container(
+        body: Column(
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                SizedBox(height: 120,),
+                FlatButton(
+                    onPressed: postsClick,
+                    child: Text('Posts', style: postText)
+                ),
+                FlatButton(
+                  onPressed: subsClick,
+                  child:
+                  Text('Subreddits', style: subsText),
+                ),
+                FlatButton(
+                  onPressed: usersClick,
+                  child:
+                  Text('Users', style: usersText),
+                ),
+              ],
+            ),
+            RefreshIndicator(
+              color: currentTheme.primaryColor,
+              onRefresh: _refresh,
+              child: currentPage,
+            ),
+          ],
+        )
+    );
+  }
+}
+
+
+// Text('Results', style: currentTheme.textTheme.headline1,),
+
+/* Container(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
@@ -94,15 +190,8 @@ class _SearchPageState extends State<SearchPage> {
                           futureUserSearchBuilder(_loadUsers()),
                           SizedBox(height: 30,),
                           Text('Posts:', style: currentTheme.textTheme.headline2,),
-                          SizedBox(height: 10,),
-                          futurePostBuilder(_loadPosts()),
+                          //SizedBox(height: 10,),
+                          //futurePostBuilder(_loadPosts()),
                         ],
                       ),
-                    ),
-                  ],
-                ),
-              )
-        )
-    );
-  }
-}
+                    ),*/

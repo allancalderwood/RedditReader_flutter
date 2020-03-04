@@ -29,16 +29,24 @@ Widget futureSubBuilder(Future<List<Subreddit>> future){
         default:
           if (snapshot.hasError)
             return new Text('Error: ${snapshot.error}', style:currentTheme.textTheme.headline2,);
+          else if (snapshot.data==null || snapshot.data.isEmpty){
+            return new Padding(
+              padding: EdgeInsets.all(20),
+              child: Text('No Subreddits found.', style:currentTheme.textTheme.headline3,),
+            );
+          }
           else
-            return Container(
-              height: 620,
-              child: ListView.builder(
+            return Expanded(
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                child: ListView.builder(
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 itemCount: snapshot.data.length,
                 itemBuilder: (context, index){
                   return subWidget(sub: snapshot.data[index]);
                 },
+              ),
               ),
             );
       }

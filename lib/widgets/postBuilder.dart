@@ -42,17 +42,19 @@ Widget futurePostBuilder(Future<List<Post>> future){
             );
           }
           else{
-            return Container(
-              height: 650,
-              child: ListView.builder(
-                controller: scrollController,
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: snapshot.data.length,
-                itemBuilder: (context, index){
-                  return postWidget(post: snapshot.data[index]);
-                },
-              ),
+            return Expanded(
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                child: ListView.builder(
+                  controller: scrollController,
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (context, index){
+                    return postWidget(post: snapshot.data[index]);
+                  },
+                ),
+              )
             );
           }
       }

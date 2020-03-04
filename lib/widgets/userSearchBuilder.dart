@@ -36,15 +36,18 @@ Widget futureUserSearchBuilder(Future<List<UserOther>> future){
             );
           }
           else{
-            return Container(
-              child: ListView.builder(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: snapshot.data.length,
-                itemBuilder: (context, index){
-                  return userWidget(user: snapshot.data[index]);
-                },
-              ),
+            return Expanded(
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                child: ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (context, index){
+                    return userWidget(user: snapshot.data[index]);
+                  },
+                ),
+              )
             );
           }
       }

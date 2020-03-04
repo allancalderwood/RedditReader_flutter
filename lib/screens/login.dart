@@ -3,6 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:redditreader_flutter/models/user.dart';
 import 'package:redditreader_flutter/screens/homePage.dart';
 import 'package:redditreader_flutter/screens/register.dart'; // import register page
+import 'package:redditreader_flutter/utils/redditAPI.dart';
 import '../styles/theme.dart'; // import theme of app
 import '../utils/slides.dart'; // import slide animations
 import 'authWebView.dart';
@@ -24,8 +25,9 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void skipLogin(String token){
-    if(!(token==null)){
+    if(token!=null){
       User.retrieveUser();
+      refreshToken();
       Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => HomePage())

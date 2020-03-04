@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:redditreader_flutter/models/post.dart';
 import 'package:redditreader_flutter/models/user.dart';
+import 'package:redditreader_flutter/screens/searchPage.dart';
 import 'package:redditreader_flutter/styles/inputDecoration.dart';
 import 'package:redditreader_flutter/utils/postFactory.dart';
 import 'package:redditreader_flutter/widgets/postBuilder.dart';
@@ -82,7 +83,11 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void search(){
+  void _search(String search)async{
+    Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => SearchPage(search: search,))
+    );
   }
 
   Future<void> _refresh(){
@@ -128,6 +133,7 @@ class _HomePageState extends State<HomePage> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 20.00, 0, 15.00),
                       child: TextField(
+                        onSubmitted: (value){_search(value);},
                         maxLines: 1,
                         decoration: buildInputDecoration("Search...",true,Icon(Icons.search)),
                       ),

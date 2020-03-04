@@ -33,8 +33,15 @@ Widget futurePostBuilder(Future<List<Post>> future){
         );
         default:
           if (snapshot.hasError)
-            return new Text('Error: ${snapshot.error}', style:currentTheme.textTheme.headline2,);
-          else
+            return Text('Unable to load posts.', style:currentTheme.textTheme.headline3,);
+            //return new Text('Error: ${snapshot.error}', style:currentTheme.textTheme.headline2,);
+          else if (snapshot.data==null || snapshot.data.isEmpty){
+            return new Padding(
+              padding: EdgeInsets.all(20),
+              child: Text('No Posts found.', style:currentTheme.textTheme.headline3,),
+            );
+          }
+          else{
             return Container(
               height: 650,
               child: ListView.builder(
@@ -47,6 +54,7 @@ Widget futurePostBuilder(Future<List<Post>> future){
                 },
               ),
             );
+          }
       }
     },
   );

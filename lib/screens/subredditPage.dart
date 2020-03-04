@@ -228,21 +228,30 @@ class _SubredditState extends State<SubredditPage> {
                                             },
                                           ),
                                         ),
-                                        FlatButton(
-                                          onPressed: (){
-                                            setState(() {
-                                              if(subbed){
-                                                subbed = false;
-                                                subStatus = 'Subscribe';
-                                                subscribe(widget.sub.name, 'unsub');
-                                              }else{
-                                                subbed = true;
-                                                subStatus = 'Subscribed';
-                                                subscribe(widget.sub.name, 'sub');
-                                              }
-                                            });
-                                          },
-                                          child: Text(subStatus),
+                                        SizedBox(
+                                          height: 25,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(15.0),
+                                              color: subbed? Colors.grey:currentTheme.primaryColor,
+                                            ),
+                                            child: FlatButton(
+                                              onPressed: (){
+                                                setState(() {
+                                                  if(subbed){
+                                                    subbed = false;
+                                                    subStatus = 'Subscribe';
+                                                    subscribe(widget.sub.name, 'unsub');
+                                                  }else{
+                                                    subbed = true;
+                                                    subStatus = 'Subscribed';
+                                                    subscribe(widget.sub.name, 'sub');
+                                                  }
+                                                });
+                                              },
+                                              child: Text(subStatus),
+                                            ),
+                                          ),
                                         )
                                       ],
                                     )

@@ -84,23 +84,8 @@ class _SearchPageState extends State<SearchPage> {
     }
   }
 
-  Future<void> _refresh(){
-    Completer<Null> c = new Completer<Null>();
-    setState((){
-      if(users){
-        currentPage = futureUserSearchBuilder(_loadUsers());
-      } else if(posts){
-        currentPage = futurePostBuilder(_loadPosts());
-      }else{
-        currentPage = futureSubBuilder(_loadSubs());
-      }
-    });
-    c.complete();
-    return c.future;
-  }
-
   Future<List<Subreddit>> _loadSubs()async{
-    http.Response data = await http.get(Uri.encodeFull(callBaseURL+'/search.json?limit=6&q=${widget.search}&type=sr'), headers: getHeader());
+    http.Response data = await http.get(Uri.encodeFull(callBaseURL+'/search.json?limit=100&q=${widget.search}&type=sr'), headers: getHeader());
     var jsonData = json.decode(data.body);
     List<Subreddit> subs = [];
     if(jsonData['message']=='Unauthorized'){
@@ -112,7 +97,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Future<List<Post>> _loadPosts()async{
-    http.Response data = await http.get(Uri.encodeFull(callBaseURL+'/search.json?limit=30&q=${widget.search}&type=link'), headers: getHeader());
+    http.Response data = await http.get(Uri.encodeFull(callBaseURL+'/search.json?limit=100&q=${widget.search}&type=link'), headers: getHeader());
     var jsonData = json.decode(data.body);
     List<Post> posts = [];
     if(jsonData['message']=='Unauthorized'){
@@ -124,7 +109,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Future<List<UserOther>> _loadUsers()async{
-    http.Response data = await http.get(Uri.encodeFull(callBaseURL+'/search.json?limit=6&q=${widget.search}&type=user'), headers: getHeader());
+    http.Response data = await http.get(Uri.encodeFull(callBaseURL+'/search.json?limit=100&q=${widget.search}&type=user'), headers: getHeader());
     var jsonData = json.decode(data.body);
     List<UserOther> users = [];
     if(jsonData['message']=='Unauthorized'){
@@ -144,6 +129,9 @@ class _SearchPageState extends State<SearchPage> {
         drawer: RedditReaderDrawer(),
         body: Column(
           children: <Widget>[
+            SizedBox(height: 30,),
+            Text("Results for '${widget.search}'", style: (widget.search.length<10)? currentTheme.textTheme.headline1 : currentTheme.textTheme.headline2),
+            SizedBox(height: 10,),
             Row(
               children: <Widget>[
                 SizedBox(height: 120,),
@@ -163,11 +151,7 @@ class _SearchPageState extends State<SearchPage> {
                 ),
               ],
             ),
-            RefreshIndicator(
-              color: currentTheme.primaryColor,
-              onRefresh: _refresh,
-              child: currentPage,
-            ),
+            currentPage
           ],
         )
     );

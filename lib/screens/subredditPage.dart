@@ -187,7 +187,7 @@ class _SubredditState extends State<SubredditPage> {
                                   width: 20,
                                 ),
                                 Text(
-                                  'R/${widget.sub.name}', style: currentTheme.textTheme.headline1, overflow: TextOverflow.ellipsis,
+                                  'R/${widget.sub.name}', style: (widget.sub.name.length<=16)? currentTheme.textTheme.headline1: currentTheme.textTheme.headline2,
                                 ),
                                 SizedBox(
                                   width: 50,

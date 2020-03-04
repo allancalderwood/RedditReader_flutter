@@ -42,13 +42,14 @@ Widget futurePostBuilder(Future<List<Post>> future){
             );
           }
           else{
-            return Expanded(
+            return Container(
+              height: 630,
               child: Padding(
                 padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
                 child: ListView.builder(
                   controller: scrollController,
                   scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
+
                   itemCount: snapshot.data.length,
                   itemBuilder: (context, index){
                     return postWidget(post: snapshot.data[index]);

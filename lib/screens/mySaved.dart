@@ -48,7 +48,7 @@ class _MySavedState extends State<MySaved> {
         appBar: RedditReaderAppBar(),
         drawer: RedditReaderDrawer(),
         body: Padding(
-            padding: EdgeInsets.all(20),
+            padding: EdgeInsets.fromLTRB(0,20,0,20),
             child: Center(
               child: Column(
                 children: <Widget>[

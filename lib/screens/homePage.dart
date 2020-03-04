@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> {
   @override
   initState(){
     currentPage = futurePostBuilder(_loadHome());
-    mustCallSuper;
+    super.initState();
   }
 
   Future<List<Post>> _loadHome()async{
@@ -66,7 +66,7 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         homeText = currentTheme.textTheme.headline1;
         popularText = TextStyle(fontSize: 26.0,color: currentTheme.primaryColor);
-        currentPage = futurePostBuilder(_loadHome());
+        currentPage =  futurePostBuilder(_loadHome());
       });
     }
   }
@@ -142,10 +142,10 @@ class _HomePageState extends State<HomePage> {
                       ])
               ),
             ),
-            RefreshIndicator(
+            new RefreshIndicator(
               color: currentTheme.primaryColor,
               onRefresh: _refresh,
-              child: currentPage,
+              child: currentPage
             ),
           ],
         )

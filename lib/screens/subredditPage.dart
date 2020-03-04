@@ -8,6 +8,7 @@ import 'package:redditreader_flutter/models/post.dart';
 import 'package:redditreader_flutter/models/subreddit.dart';
 import 'package:redditreader_flutter/models/user.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:redditreader_flutter/screens/searchSubredditPage.dart';
 import 'package:redditreader_flutter/styles/inputDecoration.dart';
 import 'package:redditreader_flutter/utils/postFactory.dart';
 import 'package:redditreader_flutter/utils/subFactory.dart';
@@ -130,6 +131,13 @@ class _SubredditState extends State<SubredditPage> {
     }
   }
 
+  void _search(String search)async{
+    Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => SearchSubredditPage(search: search, sub: widget.sub.name))
+    );
+  }
+
 
   // content of the screen
   @override
@@ -187,6 +195,7 @@ class _SubredditState extends State<SubredditPage> {
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0, 20.00, 0, 15.00),
                             child: TextField(
+                              onSubmitted: (value){_search(value);},
                               maxLines: 1,
                               decoration: buildInputDecoration("Search...",true,Icon(Icons.search)),
                             ),

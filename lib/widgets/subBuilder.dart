@@ -31,7 +31,7 @@ Widget futureSubBuilder(Future<List<Subreddit>> future){
             return new Text('Error: ${snapshot.error}', style:currentTheme.textTheme.headline2,);
           else
             return Container(
-              height: 650,
+              height: 620,
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,

@@ -13,65 +13,15 @@ import 'package:redditreader_flutter/styles/theme.dart';
 import 'package:redditreader_flutter/utils/redditAPI.dart';
 import 'package:share/share.dart';
 
-Widget futurePostBuilder(Future<List<Post>> future){
-  final scrollController = ScrollController();
-  scrollController.addListener(() {
-    if(scrollController.position.maxScrollExtent == scrollController.offset){
-      // TODO load more posts
-    }
-  });
-
-  return FutureBuilder<List<Post>>(
-    future: future,
-    builder: (context, snapshot){
-      switch (snapshot.connectionState) {
-        case ConnectionState.none:
-        case ConnectionState.waiting:
-        return Container(
-            child: Center(
-              child: CircularProgressIndicator(backgroundColor: currentTheme.primaryColor,),
-            )
-        );
-        default:
-          if (snapshot.hasError)
-            return Text('Unable to load posts.', style:currentTheme.textTheme.headline3,);
-            //return new Text('Error: ${snapshot.error}', style:currentTheme.textTheme.headline2,);
-          else if (snapshot.data==null || snapshot.data.isEmpty){
-            return new Padding(
-              padding: EdgeInsets.all(20),
-              child: Text('No Posts found.', style:currentTheme.textTheme.headline3,),
-            );
-          }
-          else{
-            return Container(
-              height: 630,
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                child: ListView.builder(
-                  controller: scrollController,
-                  scrollDirection: Axis.vertical,
-                  itemCount: snapshot.data.length,
-                  itemBuilder: (context, index){
-                    return postWidget(post: snapshot.data[index]);
-                  },
-                ),
-              )
-            );
-          }
-      }
-    },
-  );
-}
-
-class postWidget extends StatefulWidget{
-  postWidget({Key key, this.post}) : super(key: key);
+class ExpandedPostWidget extends StatefulWidget{
+  ExpandedPostWidget({Key key, this.post}) : super(key: key);
   final Post post;
 
   @override
-  _postWidgetState createState() => _postWidgetState();
+  _ExpandedPostWidgetState createState() => _ExpandedPostWidgetState();
 }
 
-class _postWidgetState extends State<postWidget> {
+class _ExpandedPostWidgetState extends State<ExpandedPostWidget> {
   bool liked;
   bool upvoted;
   bool downvoted;
@@ -208,28 +158,28 @@ class _postWidgetState extends State<postWidget> {
                         ),
                         SizedBox(width: 10,),
                         Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(50.0),
-                            color: currentTheme.accentColor,
-                          ),
-                          padding: EdgeInsets.fromLTRB(0, 0,0, 0),
-                          child: Padding(
-                            padding: EdgeInsets.all(7),
-                            child: Row(
-                              children: <Widget>[
-                                Icon(Icons.access_alarm, size: 20,),
-                                SizedBox(width:5),
-                                Text('${widget.post.time}', style: currentTheme.textTheme.headline4),
-                              ],
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50.0),
+                              color: currentTheme.accentColor,
                             ),
-                          )
+                            padding: EdgeInsets.fromLTRB(0, 0,0, 0),
+                            child: Padding(
+                              padding: EdgeInsets.all(7),
+                              child: Row(
+                                children: <Widget>[
+                                  Icon(Icons.access_alarm, size: 20,),
+                                  SizedBox(width:5),
+                                  Text('${widget.post.time}', style: currentTheme.textTheme.headline4),
+                                ],
+                              ),
+                            )
                         ),
                       ],
                     ),
                     SizedBox(height: 10,),
                     Container(
                         width: 400,
-                        child: Text('${widget.post.title}', maxLines: 3, overflow: TextOverflow.ellipsis,style: currentTheme.textTheme.headline4)
+                        child: Text('${widget.post.title}',style: currentTheme.textTheme.headline3)
                     ),
                   ],
                 ),
@@ -326,7 +276,7 @@ class _postWidgetState extends State<postWidget> {
                             Container(
                               child: InkWell(
                                 onTap: (){
-                                   showPostOptions(widget.post);
+                                  showPostOptions(widget.post);
                                 },
                                 child: Icon(Icons.clear_all, size: 35, color: currentTheme.splashColor),
                               ),
@@ -371,7 +321,7 @@ Widget postImage(Post p){
   } else return Padding(
     padding: EdgeInsets.all(15.00),
     child: Container(
-      child: Text('${p.selftext}', maxLines:8, overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: 13.0, color: currentTheme.splashColor)),
+      child: Text('${p.selftext}',style: currentTheme.textTheme.bodyText1),
     ),
   );
 }

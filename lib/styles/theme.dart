@@ -18,7 +18,7 @@ ThemeData buildDefaultTheme() {
       textTheme: TextTheme(
         headline1: TextStyle(fontSize: 36.0, fontWeight: FontWeight.bold, color: Colors.white),
         headline2: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w600, color: Colors.white),
-        headline3: TextStyle(fontSize: 15.0, color: Colors.white),
+        headline3: TextStyle(fontSize: 18.0, color: Colors.white),
         headline4: TextStyle(fontSize: 15.0, color: Colors.white),
         headline5: TextStyle(fontSize: 13.0, color: const Color(0xff1FCCB7)),
         bodyText1: TextStyle(fontSize: 14.0, color: Colors.white),
@@ -61,7 +61,7 @@ ThemeData buildLightTheme() {
       textTheme: TextTheme(
         headline1: TextStyle(fontSize: 36.0, fontWeight: FontWeight.bold, color: Colors.black87),
         headline2: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w600, color: Colors.black87),
-        headline3: TextStyle(fontSize: 15.0, color: Color(0xff272727)),
+        headline3: TextStyle(fontSize: 18.0, color: Color(0xff272727)),
         headline4: TextStyle(fontSize: 15.0, color: Color(0xff272727)),
         headline5: TextStyle(fontSize: 13.0, color: Color(0xff272727)),
         bodyText1: TextStyle(fontSize: 14.0, color: Colors.black87),

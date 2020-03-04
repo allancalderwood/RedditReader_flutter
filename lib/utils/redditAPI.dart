@@ -152,12 +152,14 @@ void save(String id, String category)async{
   Map<String, String> _headers = {'User-Agent':clientID,"Content-type": "application/x-www-form-urlencoded", 'Authorization':'Bearer ${User.token}'};
   String _body = "id=$id&category=$category";
   http.Response response = await http.post(Uri.encodeFull(callBaseURL+'/api/vote'), headers: _headers, body: _body);
+
 }
 
 void unsave(String id)async{
   Map<String, String> _headers = {'User-Agent':clientID,"Content-type": "application/x-www-form-urlencoded", 'Authorization':'Bearer ${User.token}'};
   String _body = "id=$id";
   http.Response response = await http.post(Uri.encodeFull(callBaseURL+'/api/vote'), headers: _headers, body: _body);
+
 }
 
 void subscribe(String sr, String action)async{
@@ -170,6 +172,4 @@ void subscribe(String sr, String action)async{
   }
   Map<String, String> _headers = {'User-Agent':clientID,"Content-type": "application/x-www-form-urlencoded", 'Authorization':'Bearer ${User.token}'};
   http.Response response = await http.post(Uri.encodeFull(callBaseURL+'/api/subscribe'), headers: _headers, body: _body);
-  var jsonData = json.decode(response.body);
-  print('RR: RESPONSE: $jsonData');
 }

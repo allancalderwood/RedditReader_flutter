@@ -2,7 +2,6 @@ import 'package:intl/intl.dart';
 
 String readTimestamp(int timestamp) {
   var now = DateTime.now();
-  var format = new DateFormat('HH:mm a');
   var date = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
   var diff = now.difference(date);
   var time = '';
@@ -21,12 +20,17 @@ String readTimestamp(int timestamp) {
     } else {
       time = diff.inDays.toString() + 'd';
     }
-  } else {
-    if (diff.inDays == 7) {
+  } else if (diff.inDays >=7 && diff.inDays < 365) {
+    if (diff.inDays == 1) {
       time = (diff.inDays / 7).floor().toString() + 'w';
     } else {
-
       time = (diff.inDays / 7).floor().toString() + 'w';
+    }
+  }else {
+    if (diff.inDays == 365) {
+      time = (diff.inDays / 365).floor().toString() + 'y';
+    } else {
+      time = (diff.inDays / 365).floor().toString() + 'y';
     }
   }
 

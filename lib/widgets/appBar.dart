@@ -20,7 +20,7 @@ class _RedditReaderAppBarState extends State<RedditReaderAppBar>{
       leading: IconButton(
         icon: Icon(Icons.menu),
         iconSize: 50.0,
-        color: currentTheme.iconTheme.color,
+        color: currentTheme.primaryColor,
         onPressed: (){ Scaffold.of(context).openDrawer();}
       ),
       actions: <Widget>[

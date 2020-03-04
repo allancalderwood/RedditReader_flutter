@@ -49,7 +49,6 @@ Widget futurePostBuilder(Future<List<Post>> future){
                 child: ListView.builder(
                   controller: scrollController,
                   scrollDirection: Axis.vertical,
-
                   itemCount: snapshot.data.length,
                   itemBuilder: (context, index){
                     return postWidget(post: snapshot.data[index]);
@@ -140,7 +139,7 @@ class _postWidgetState extends State<postWidget> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return new AlertDialog(
-          title: new Text('What do you wish to do with this post?'),
+          title: new Text('What do you wish to do with this post?', style: currentTheme.textTheme.bodyText1,),
           actions: <Widget>[
             new FlatButton(
               child: new Text('Share'),
@@ -309,7 +308,7 @@ class _postWidgetState extends State<postWidget> {
                                       unsave(widget.post.id);
                                     }else{
                                       liked = true;
-                                      save(widget.post.id, "posts");
+                                      save(widget.post.id, "None");
                                     }
                                   });
                                 },

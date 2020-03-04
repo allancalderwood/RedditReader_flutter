@@ -6,6 +6,7 @@ import 'package:redditreader_flutter/screens/myProfile.dart';
 import 'package:redditreader_flutter/screens/mySaved.dart';
 import 'package:redditreader_flutter/screens/mySubreddits.dart';
 import 'package:redditreader_flutter/utils/slides.dart';
+import '../main.dart';
 import '../styles/theme.dart';
 import '../models/user.dart';
 
@@ -23,11 +24,25 @@ class _RedditReaderDrawer extends State<RedditReaderDrawer> {
   }
 
   void logOut() {
+
     User.logOut();
     Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => LoginPage())
     );
+  }
+
+  void changeTheme(){
+    setState(() {
+      if(darkTheme){
+        darkTheme=false;
+        currentTheme = buildLightTheme();
+      }else{
+        darkTheme=true;
+        currentTheme = buildDefaultTheme();
+      }
+      AppBuilder.of(context).rebuild();
+    });
   }
 
   @override
@@ -109,12 +124,18 @@ class _RedditReaderDrawer extends State<RedditReaderDrawer> {
               child: Padding(
                 padding: EdgeInsets.all(10.0),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     FlatButton(
-                        color: Colors.redAccent,
                         //padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
                         onPressed: logOut,
-                        child: Text('Log Out')
+                        child: Text('Log Out', style: TextStyle(color: Colors.redAccent,))
+                    ),
+                    FlatButton(
+                        color: currentTheme.splashColor,
+                        //padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
+                        onPressed: changeTheme,
+                        child: Text('Change Theme')
                     ),
                   ],
                 ),

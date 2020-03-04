@@ -163,7 +163,7 @@ class _SubredditState extends State<SubredditPage> {
                     Container(
                       height: 300,
                       decoration: BoxDecoration(
-                          color: Color(0xFF0E3311).withOpacity(0.2)
+                          color: currentTheme.backgroundColor.withOpacity(0.2)
                       ),
                     ),
                     Padding(
@@ -189,22 +189,17 @@ class _SubredditState extends State<SubredditPage> {
                                 Text(
                                   'R/${widget.sub.name}', style: (widget.sub.name.length<=16)? currentTheme.textTheme.headline1: currentTheme.textTheme.headline2,
                                 ),
-                                SizedBox(
-                                  width: 50,
-                                ),
                               ],
                             ),
                             Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 20.00, 0, 15.00),
+                              padding: const EdgeInsets.fromLTRB(0, 20.00, 0, 25.00),
                               child: TextField(
                                 onSubmitted: (value){_search(value);},
                                 maxLines: 1,
                                 decoration: buildInputDecoration("Search...",true,Icon(Icons.search)),
                               ),
                             ),
-                            SizedBox(height: 10),
-                            Container(
-                              child: Column(
+                             Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Container(
@@ -260,7 +255,6 @@ class _SubredditState extends State<SubredditPage> {
                                   ),
                                 ],
                               ),
-                            )
                           ]),
                     )
                   ],

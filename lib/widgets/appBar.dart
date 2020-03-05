@@ -18,9 +18,9 @@ class _RedditReaderAppBarState extends State<RedditReaderAppBar>{
     return AppBar(
       backgroundColor: Color(0x00000000),
       leading: IconButton(
-        icon: Icon(Icons.menu),
+        icon: Icon(Icons.menu, color: currentTheme.textTheme.headline1.color,),
+        color: currentTheme.textTheme.headline1.color,
         iconSize: 50.0,
-        color: currentTheme.primaryColor,
         onPressed: (){ Scaffold.of(context).openDrawer();}
       ),
       actions: <Widget>[

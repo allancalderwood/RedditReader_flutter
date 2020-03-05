@@ -8,6 +8,7 @@ import 'package:redditreader_flutter/models/subreddit.dart';
 import 'package:redditreader_flutter/models/userOther.dart';
 import 'package:redditreader_flutter/screens/myProfile.dart';
 import 'package:redditreader_flutter/screens/postPage.dart';
+import 'package:redditreader_flutter/screens/postReply.dart';
 import 'package:redditreader_flutter/screens/subredditPage.dart';
 import 'package:redditreader_flutter/styles/theme.dart';
 import 'package:redditreader_flutter/utils/redditAPI.dart';
@@ -56,6 +57,55 @@ Widget futurePostBuilder(Future<List<Post>> future){
                   },
                 ),
               )
+            );
+          }
+      }
+    },
+  );
+}
+
+Widget futurePostBuilderExp(Future<List<Post>> future){
+  final scrollController = ScrollController();
+  scrollController.addListener(() {
+    if(scrollController.position.maxScrollExtent == scrollController.offset){
+      // TODO load more posts
+    }
+  });
+
+  return FutureBuilder<List<Post>>(
+    future: future,
+    builder: (context, snapshot){
+      switch (snapshot.connectionState) {
+        case ConnectionState.none:
+        case ConnectionState.waiting:
+          return Container(
+              child: Center(
+                child: CircularProgressIndicator(backgroundColor: currentTheme.primaryColor,),
+              )
+          );
+        default:
+          if (snapshot.hasError)
+            return Text('Unable to load posts.', style:currentTheme.textTheme.headline3,);
+          //return new Text('Error: ${snapshot.error}', style:currentTheme.textTheme.headline2,);
+          else if (snapshot.data==null || snapshot.data.isEmpty){
+            return new Padding(
+              padding: EdgeInsets.all(20),
+              child: Text('No Posts found.', style:currentTheme.textTheme.headline3,),
+            );
+          }
+          else{
+            return Expanded(
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                  child: ListView.builder(
+                    controller: scrollController,
+                    scrollDirection: Axis.vertical,
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (context, index){
+                      return postWidget(post: snapshot.data[index]);
+                    },
+                  ),
+                )
             );
           }
       }
@@ -140,15 +190,28 @@ class _postWidgetState extends State<postWidget> {
     );
   }
 
+  void reply(Post post) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => PostReply(post: post))
+    );
+  }
+
 
   void showPostOptions(Post post){
     showDialog<Null>(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      barrierDismissible: true,
       builder: (BuildContext context) {
         return new AlertDialog(
           title: new Text('What do you wish to do with this post?', style: currentTheme.textTheme.bodyText1,),
           actions: <Widget>[
+            new FlatButton(
+              child: new Text('Comment'),
+              onPressed: () {
+                reply(post);
+              },
+            ),
             new FlatButton(
               child: new Text('Share'),
               onPressed: () {
@@ -163,12 +226,6 @@ class _postWidgetState extends State<postWidget> {
               child: new Text('Report'),
               onPressed: () {
                 // TODO report
-              },
-            ),
-            new FlatButton(
-              child: new Text('Exit'),
-              onPressed: () {
-                Navigator.of(context).pop();
               },
             ),
           ],

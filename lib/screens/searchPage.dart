@@ -39,7 +39,7 @@ class _SearchPageState extends State<SearchPage> {
      subs = false;
      users = false;
      posts = true;
-     currentPage = futurePostBuilder(_loadPosts());
+     currentPage = futurePostBuilderExp(_loadPosts());
   }
 
   void postsClick(){
@@ -51,7 +51,7 @@ class _SearchPageState extends State<SearchPage> {
         postText = currentTheme.textTheme.headline1;
         usersText = TextStyle(fontSize: 26.0,color: currentTheme.primaryColor);
         subsText = TextStyle(fontSize: 26.0,color: currentTheme.primaryColor);
-        currentPage = futurePostBuilder(_loadPosts());
+        currentPage = futurePostBuilderExp(_loadPosts());
       });
     }
   }
@@ -157,25 +157,3 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 }
-
-
-// Text('Results', style: currentTheme.textTheme.headline1,),
-
-/* Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text('Subreddits:', style: currentTheme.textTheme.headline2,),
-                          SizedBox(height: 10,),
-                          futureSubSearchBuilder(_loadSubs()),
-                          SizedBox(height: 30,),
-                          Text('Users:', style: currentTheme.textTheme.headline2,),
-                          SizedBox(height: 10,),
-                          futureUserSearchBuilder(_loadUsers()),
-                          SizedBox(height: 30,),
-                          Text('Posts:', style: currentTheme.textTheme.headline2,),
-                          //SizedBox(height: 10,),
-                          //futurePostBuilder(_loadPosts()),
-                        ],
-                      ),
-                    ),*/

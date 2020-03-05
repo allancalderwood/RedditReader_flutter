@@ -112,7 +112,7 @@ class _userWidgetState extends State<userWidget> {
                             ),
                             Padding(
                               padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                              child: Text('r/${widget.user.username}', style: currentTheme.textTheme.headline2),
+                              child: Text('u/${widget.user.username}', style: currentTheme.textTheme.headline2),
                             ),
                             SizedBox(width: 10,),
                           ],

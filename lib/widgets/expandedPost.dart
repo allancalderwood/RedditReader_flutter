@@ -8,6 +8,7 @@ import 'package:redditreader_flutter/models/subreddit.dart';
 import 'package:redditreader_flutter/models/userOther.dart';
 import 'package:redditreader_flutter/screens/myProfile.dart';
 import 'package:redditreader_flutter/screens/postPage.dart';
+import 'package:redditreader_flutter/screens/postReply.dart';
 import 'package:redditreader_flutter/screens/subredditPage.dart';
 import 'package:redditreader_flutter/styles/theme.dart';
 import 'package:redditreader_flutter/utils/redditAPI.dart';
@@ -90,15 +91,28 @@ class _ExpandedPostWidgetState extends State<ExpandedPostWidget> {
     );
   }
 
+  void reply(Post post) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => PostReply(post: post))
+    );
+  }
+
 
   void showPostOptions(Post post){
     showDialog<Null>(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      barrierDismissible: true,
       builder: (BuildContext context) {
         return new AlertDialog(
           title: new Text('What do you wish to do with this post?', style: currentTheme.textTheme.bodyText1,),
           actions: <Widget>[
+            new FlatButton(
+              child: new Text('Comment'),
+              onPressed: () {
+                reply(post);
+              },
+            ),
             new FlatButton(
               child: new Text('Share'),
               onPressed: () {

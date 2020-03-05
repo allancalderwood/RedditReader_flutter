@@ -99,8 +99,7 @@ Future<void> refreshTokenAsync()async{
 }
 
 Future<void> updateUser()async{
-  Map<String, String> _headers = {'User-Agent':_userAgent,"Content-type": "application/x-www-form-urlencoded", 'Authorization':'Bearer ${User.token}'};
-  http.Response response = await http.get(Uri.encodeFull(callBaseURL+'/api/v1/me'), headers: _headers);
+  http.Response response = await http.get(Uri.encodeFull(callBaseURL+'/api/v1/me'), headers: getHeader());
 
   var responseText = json.decode(response.body);
     User.username = responseText['name'];
@@ -143,22 +142,19 @@ Future<void> logOutUser()async{
 }
 
 void vote(String id, int vote)async{
-  Map<String, String> _headers = {'User-Agent':clientID,"Content-type": "application/x-www-form-urlencoded", 'Authorization':'Bearer ${User.token}'};
   String _body = "id=$id&dir=$vote";
-  http.Response response = await http.post(Uri.encodeFull(callBaseURL+'/api/vote'), headers: _headers, body: _body);
+  http.Response response = await http.post(Uri.encodeFull(callBaseURL+'/api/vote'), headers: getHeader(), body: _body);
 }
 
 void save(String id, String category)async{
-  Map<String, String> _headers = {'User-Agent':clientID,"Content-type": "application/x-www-form-urlencoded", 'Authorization':'Bearer ${User.token}'};
   String _body = "id=$id&category=$category";
-  http.Response response = await http.post(Uri.encodeFull(callBaseURL+'/api/vote'), headers: _headers, body: _body);
+  http.Response response = await http.post(Uri.encodeFull(callBaseURL+'/api/vote'), headers: getHeader(), body: _body);
 
 }
 
 void unsave(String id)async{
-  Map<String, String> _headers = {'User-Agent':clientID,"Content-type": "application/x-www-form-urlencoded", 'Authorization':'Bearer ${User.token}'};
   String _body = "id=$id";
-  http.Response response = await http.post(Uri.encodeFull(callBaseURL+'/api/vote'), headers: _headers, body: _body);
+  http.Response response = await http.post(Uri.encodeFull(callBaseURL+'/api/vote'), headers: getHeader(), body: _body);
 
 }
 
@@ -170,6 +166,26 @@ void subscribe(String sr, String action)async{
   }else{
     _body = "action=$action&skip_initial_defaults=$skipDefaults&sr_name=${sr}";
   }
-  Map<String, String> _headers = {'User-Agent':clientID,"Content-type": "application/x-www-form-urlencoded", 'Authorization':'Bearer ${User.token}'};
-  http.Response response = await http.post(Uri.encodeFull(callBaseURL+'/api/subscribe'), headers: _headers, body: _body);
+  http.Response response = await http.post(Uri.encodeFull(callBaseURL+'/api/subscribe'), headers: getHeader(), body: _body);
+}
+
+void commentCall(String parent, String content)async{
+  String _body = "thing_id=$parent&text=$content&api_type=json";
+  http.Response response = await http.post(Uri.encodeFull(callBaseURL+'/api/comment'), headers: getHeader(), body: _body);
+  var jsonData = json.decode(response.body);
+  print('RR: $jsonData');
+}
+
+void delCall(String id)async{
+  String _body = "id=$id";
+  http.Response response = await http.post(Uri.encodeFull(callBaseURL+'/api/del'), headers: getHeader(), body: _body);
+  var jsonData = json.decode(response.body);
+  print('RR: $jsonData');
+}
+
+void editTextCall(String id, String content )async{
+  String _body = "thing_id=$id&text=$content&api_type=json";
+  http.Response response = await http.post(Uri.encodeFull(callBaseURL+'/api/editusertext'), headers: getHeader(), body: _body);
+  var jsonData = json.decode(response.body);
+  print('RR: $jsonData');
 }

@@ -56,7 +56,7 @@ class _MySavedState extends State<MySaved> {
                   Text('Your Saved Posts', style: currentTheme.textTheme.headline1,),
                   SizedBox(height: 80),
                   Container(
-                    child: futurePostBuilder(_loadSaved()),
+                    child: futurePostBuilderExp(_loadSaved()),
                   ),
                 ],
               ),

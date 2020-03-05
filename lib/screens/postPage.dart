@@ -1,15 +1,17 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:redditreader_flutter/models/comment.dart';
 import 'package:redditreader_flutter/models/post.dart';
-import 'package:redditreader_flutter/models/user.dart';
-import 'package:redditreader_flutter/styles/inputDecoration.dart';
+
+import 'package:redditreader_flutter/styles/theme.dart';
 import 'package:redditreader_flutter/utils/commentFactory.dart';
-import 'package:redditreader_flutter/utils/postFactory.dart';
+
 import 'package:redditreader_flutter/widgets/commentBuilder.dart';
 import 'package:redditreader_flutter/widgets/expandedPost.dart';
-import 'package:redditreader_flutter/widgets/postBuilder.dart';
+
 import 'package:redditreader_flutter/utils/redditAPI.dart';
 
 
@@ -22,10 +24,11 @@ class PostPage extends StatefulWidget {
 }
 
 class _PostPageState extends State<PostPage> {
+  Widget currentPage;
 
   @override
   initState(){
-    _loadComments();
+    currentPage = futureCommentBuilder(_loadComments());
     super.initState();
   }
 
@@ -38,6 +41,15 @@ class _PostPageState extends State<PostPage> {
     return comments;
   }
 
+  Future<void> _refresh(){
+    Completer<Null> c = new Completer<Null>();
+    setState((){
+      currentPage = futureCommentBuilder(_loadComments());
+    });
+    c.complete();
+    return c.future;
+  }
+
   // content of the screen
   @override
   Widget build(BuildContext context) {
@@ -48,7 +60,11 @@ class _PostPageState extends State<PostPage> {
               child: Column(
                 children: <Widget>[
                   ExpandedPostWidget(post: widget.post),
-                  futureCommentBuilder(_loadComments())
+                  new RefreshIndicator(
+                      color: currentTheme.primaryColor,
+                      onRefresh: _refresh,
+                      child: currentPage
+                  ),
                 ],
               ),
             )

@@ -31,7 +31,7 @@ Widget futureCommentBuilder(Future<List<Comment>> future){
           else if (snapshot.data==null || snapshot.data.isEmpty){
             return new Padding(
               padding: EdgeInsets.all(20),
-              child: Text('No Comment found.', style:currentTheme.textTheme.headline3,),
+              child: Text('No Comments found.', style:currentTheme.textTheme.headline3,),
             );
           }
           else{

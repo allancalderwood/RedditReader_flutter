@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'dart:convert';
@@ -14,7 +13,6 @@ import 'package:redditreader_flutter/utils/postFactory.dart';
 import 'package:redditreader_flutter/utils/subFactory.dart';
 import 'package:redditreader_flutter/widgets/postBuilder.dart';
 import 'package:redditreader_flutter/utils/redditAPI.dart';
-import 'package:redditreader_flutter/utils/timestampHelper.dart';
 import 'package:redditreader_flutter/widgets/drawer.dart';
 import '../styles/theme.dart'; // import theme of app
 import '../widgets/appBar.dart';
@@ -187,7 +185,7 @@ class _SubredditState extends State<SubredditPage> {
                                   width: 20,
                                 ),
                                 Text(
-                                  'R/${widget.sub.name}', style: (widget.sub.name.length<=16)? currentTheme.textTheme.headline1: currentTheme.textTheme.headline2,
+                                  'R/${widget.sub.name}', style: (widget.sub.name.length<14)? currentTheme.textTheme.headline1: ((widget.sub.name.length<=24)? currentTheme.textTheme.headline2:currentTheme.textTheme.headline3),
                                 ),
                               ],
                             ),

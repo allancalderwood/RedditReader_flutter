@@ -5,7 +5,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:redditreader_flutter/models/post.dart';
 import 'package:redditreader_flutter/models/subreddit.dart';
-import 'package:redditreader_flutter/models/user.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:redditreader_flutter/screens/searchSubredditPage.dart';
 import 'package:redditreader_flutter/styles/inputDecoration.dart';
@@ -91,8 +90,7 @@ class _SubredditState extends State<SubredditPage> {
   }
 
   Future<List<Post>> _loadSubreddit()async{
-    Map<String, String> _headers = {'User-Agent':clientID,"Content-type": "application/x-www-form-urlencoded", 'Authorization':'Bearer ${User.token}'};
-    http.Response data = await http.get(Uri.encodeFull(callBaseURL+'/r/${widget.sub.name}.json?limit=200'), headers: _headers);
+    http.Response data = await http.get(Uri.encodeFull(callBaseURL+'/r/${widget.sub.name}.json?limit=200'), headers: getHeader());
     var jsonData = json.decode(data.body);
     List<Post> posts = [];
     if(jsonData['message']=='Unauthorized'){
@@ -104,8 +102,7 @@ class _SubredditState extends State<SubredditPage> {
   }
 
   Future<List<Post>> _loadSubredditNew()async{
-    Map<String, String> _headers = {'User-Agent':clientID,"Content-type": "application/x-www-form-urlencoded", 'Authorization':'Bearer ${User.token}'};
-    http.Response data = await http.get(Uri.encodeFull(callBaseURL+'/r/${widget.sub.name}/new/.json?limit=200'), headers: _headers);
+    http.Response data = await http.get(Uri.encodeFull(callBaseURL+'/r/${widget.sub.name}/new/.json?limit=200'), headers: getHeader());
     var jsonData = json.decode(data.body);
     List<Post> posts = [];
     if(jsonData['message']=='Unauthorized'){
@@ -117,8 +114,7 @@ class _SubredditState extends State<SubredditPage> {
   }
 
   Future<List<Post>> _loadSubredditTop()async{
-    Map<String, String> _headers = {'User-Agent':clientID,"Content-type": "application/x-www-form-urlencoded", 'Authorization':'Bearer ${User.token}'};
-    http.Response data = await http.get(Uri.encodeFull(callBaseURL+'/r/${widget.sub.name}/top/.json?limit=200&t=all'), headers: _headers);
+    http.Response data = await http.get(Uri.encodeFull(callBaseURL+'/r/${widget.sub.name}/top/.json?limit=200&t=all'), headers: getHeader());
     var jsonData = json.decode(data.body);
     List<Post> posts = [];
     if(jsonData['message']=='Unauthorized'){
@@ -146,58 +142,58 @@ class _SubredditState extends State<SubredditPage> {
         drawer: RedditReaderDrawer(),
         body: Padding(
           padding: EdgeInsets.fromLTRB(0,0,0,0),
-          child: Center(
-            child: Column(
-              children: <Widget>[
-                Stack(
-                  children: <Widget>[
-                    new CachedNetworkImage(
-                      height: 300,
-                      imageUrl: widget.sub.headerUrl,
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) => new CircularProgressIndicator(),
-                      errorWidget: (context, url, error) => new Container(height: 300, decoration: BoxDecoration(color: Colors.red),),
-                    ),
-                    Container(
-                      height: 300,
-                      decoration: BoxDecoration(
-                          color: currentTheme.backgroundColor.withOpacity(0.2)
+          child: SingleChildScrollView(child: Center(
+              child: Column(
+                children: <Widget>[
+                  Stack(
+                    children: <Widget>[
+                      new CachedNetworkImage(
+                        height: 300,
+                        imageUrl: widget.sub.headerUrl,
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => new CircularProgressIndicator(),
+                        errorWidget: (context, url, error) => new Container(height: 300, decoration: BoxDecoration(color: Colors.red),),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(20,100,20,0),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Row(
-                              children: <Widget>[
-                                ClipRRect(
-                                    borderRadius: BorderRadius.circular(100.0),
-                                    child: new CachedNetworkImage(
-                                      height: 50,
-                                      width: 50,
-                                      imageUrl: widget.sub.iconUrl,
-                                      placeholder: (context, url) => new CircularProgressIndicator(),
-                                      errorWidget: (context, url, error) => new Icon(Icons.supervised_user_circle),
-                                    )
-                                ),
-                                SizedBox(
-                                  width: 20,
-                                ),
-                                Text(
-                                  'R/${widget.sub.name}', style: (widget.sub.name.length<14)? currentTheme.textTheme.headline1: ((widget.sub.name.length<=24)? currentTheme.textTheme.headline2:currentTheme.textTheme.headline3),
-                                ),
-                              ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 20.00, 0, 25.00),
-                              child: TextField(
-                                onSubmitted: (value){_search(value);},
-                                maxLines: 1,
-                                decoration: buildInputDecoration("Search...",true,Icon(Icons.search)),
+                      Container(
+                        height: 300,
+                        decoration: BoxDecoration(
+                            color: currentTheme.backgroundColor.withOpacity(0.2)
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(20,100,20,0),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Row(
+                                children: <Widget>[
+                                  ClipRRect(
+                                      borderRadius: BorderRadius.circular(100.0),
+                                      child: new CachedNetworkImage(
+                                        height: 50,
+                                        width: 50,
+                                        imageUrl: widget.sub.iconUrl,
+                                        placeholder: (context, url) => new CircularProgressIndicator(),
+                                        errorWidget: (context, url, error) => new Icon(Icons.supervised_user_circle),
+                                      )
+                                  ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  Text(
+                                    'R/${widget.sub.name}', style: (widget.sub.name.length<14)? currentTheme.textTheme.headline1: ((widget.sub.name.length<=24)? currentTheme.textTheme.headline2:currentTheme.textTheme.headline3),
+                                  ),
+                                ],
                               ),
-                            ),
-                             Column(
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 20.00, 0, 25.00),
+                                child: TextField(
+                                  onSubmitted: (value){_search(value);},
+                                  maxLines: 1,
+                                  decoration: buildInputDecoration("Search...",true,Icon(Icons.search)),
+                                ),
+                              ),
+                              Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Container(
@@ -253,18 +249,18 @@ class _SubredditState extends State<SubredditPage> {
                                   ),
                                 ],
                               ),
-                          ]),
-                    )
-                  ],
-                ),
-                RefreshIndicator(
-                  color: currentTheme.primaryColor,
-                  onRefresh: _refresh,
-                  child: currentPage,
-                )
-              ],
-            )
-          ),
+                            ]),
+                      )
+                    ],
+                  ),
+                  RefreshIndicator(
+                    color: currentTheme.primaryColor,
+                    onRefresh: _refresh,
+                    child: currentPage,
+                  )
+                ],
+              )
+          ),)
         )
     );
   }

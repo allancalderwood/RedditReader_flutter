@@ -129,12 +129,6 @@ class _ExpandedPostWidgetState extends State<ExpandedPostWidget> {
                 // TODO report
               },
             ),
-            new FlatButton(
-              child: new Text('Exit'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
           ],
         );
       },

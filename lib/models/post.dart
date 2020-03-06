@@ -13,18 +13,19 @@ class Post {
   String time;
   int numComments;
   String url;
+  int numAwards;
 
   Post(this.id,this.authorID,this.authorName,
       this.imageURL, this.imageURLPreview,
       this.title, this.selftext, this.subreddit,
-      this.score, this.numComments, this.time, String url){
+      this.score, this.numComments, this.time, String url, this.numAwards){
     this.url = 'www.reddit.com'+url;
   }
 
   Post.withImage(this.id,this.authorID,this.authorName,
       this.imageURL, this.imageURLPreview, this.imageHeight, this.imageWidth,
       this.title, this.selftext, this.subreddit,
-      this.score, this.numComments, this.time, String url){
+      this.score, this.numComments, this.time, String url,this.numAwards){
     this.url = 'www.reddit.com'+url;
   }
 }

@@ -24,6 +24,7 @@ class _PostReplyState extends State<PostReply> {
 
   void create(Post post){
     commentCall(post.id, content);
+    Navigator.of(context).pop();
   }
 
   // content of the screen

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'file:///C:/Users/allan/AndroidStudioProjects/redditreader_flutter/lib/styles/theme.dart';
 import 'package:redditreader_flutter/screens/homePage.dart';
+import 'package:redditreader_flutter/styles/theme.dart';
 
 class RedditReaderAppBar extends StatefulWidget implements PreferredSizeWidget {
   RedditReaderAppBar({Key key}) : preferredSize = Size.fromHeight(kToolbarHeight), super(key: key);
@@ -16,7 +16,7 @@ class _RedditReaderAppBarState extends State<RedditReaderAppBar>{
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Color(0x00000000),
+      backgroundColor: currentTheme.backgroundColor.withOpacity(0.1),
       leading: IconButton(
         icon: Icon(Icons.menu, color: currentTheme.textTheme.headline1.color,),
         color: currentTheme.textTheme.headline1.color,

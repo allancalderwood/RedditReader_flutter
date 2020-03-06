@@ -11,12 +11,12 @@ void postFactory(var jsonData, List<Post> posts){
       post = new Post(p['name'],p['author_fullname'], p['author'],
           p['url'], p['thumbnail'],
           p['title'], p['selftext'], p['subreddit'],
-          p['score'], p['num_comments'], time, p['permalink']);
+          p['score'], p['num_comments'], time, p['permalink'],p['total_awards_received']);
     }else{
       post = new Post.withImage(p['name'],p['author_fullname'], p['author'],
           p['url'], p['thumbnail'], p['preview']['images'][0]['source']['height'], p['preview']['images'][0]['source']['width'],
           p['title'], p['selftext'], p['subreddit'],
-          p['score'], p['num_comments'], time, p['permalink']);
+          p['score'], p['num_comments'], time, p['permalink'],p['total_awards_received']);
     }
     posts.add(post);
   }

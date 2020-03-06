@@ -109,45 +109,47 @@ class _HomePageState extends State<HomePage> {
      return Scaffold(
         appBar: RedditReaderAppBar(),
         drawer: RedditReaderDrawer(),
-        body:Column(
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.all(20),
-              child: Center(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            FlatButton(
-                                onPressed: homeClick,
-                                child: Text('Homepage', style: homeText)
-                            ),
-                            FlatButton(
-                              onPressed: popularClick,
-                              child:
-                              Text('Popular', style: popularText),
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 20.00, 0, 15.00),
-                          child: TextField(
-                            onSubmitted: (value){_search(value);},
-                            maxLines: 1,
-                            decoration: buildInputDecoration("Search...",true,Icon(Icons.search)),
+        body:SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.all(20),
+                child: Center(
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              FlatButton(
+                                  onPressed: homeClick,
+                                  child: Text('Homepage', style: homeText)
+                              ),
+                              FlatButton(
+                                onPressed: popularClick,
+                                child:
+                                Text('Popular', style: popularText),
+                              ),
+                            ],
                           ),
-                        ),
-                        SizedBox(height: 10),
-                      ])
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 20.00, 0, 15.00),
+                            child: TextField(
+                              onSubmitted: (value){_search(value);},
+                              maxLines: 1,
+                              decoration: buildInputDecoration("Search...",true,Icon(Icons.search)),
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                        ])
+                ),
               ),
-            ),
-            new RefreshIndicator(
-              color: currentTheme.primaryColor,
-              onRefresh: _refresh,
-              child: currentPage
-            ),
-          ],
+              new RefreshIndicator(
+                  color: currentTheme.primaryColor,
+                  onRefresh: _refresh,
+                  child: currentPage
+              ),
+            ],
+          ),
         )
     );
   }

@@ -23,6 +23,7 @@ class _CreateCommentState extends State<CreateComment> {
   void create(Comment comment){
     String id = ('t1_${comment.id}');
     commentCall(id, content);
+    Navigator.of(context).pop();
   }
 
   // content of the screen

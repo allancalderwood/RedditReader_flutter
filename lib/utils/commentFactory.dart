@@ -12,9 +12,14 @@ void commentFactory(var jsonData, List<Comment> comments){
       String author = commentData['data']['author'];
       String url = commentData['data']['permalink'];
       int score = commentData['data']['score'];
+      String flair='';
+      int numAwards = commentData['data']['total_awards_received'];
+      if(commentData['data']['author_flair_text']!=null){
+        flair = commentData['data']['author_flair_text'];
+      }
       List<Comment> replies = [];
       _replyFactory(commentData, replies);
-      Comment comment = new Comment(id, author, content, score, time, replies, url);
+      Comment comment = new Comment(id, author, content, score, time, replies, url, flair, numAwards);
       comments.add(comment);
     }
   }
@@ -32,9 +37,14 @@ void _replyFactory(var commentData, List<Comment> replies){
         String content = replyData['data']['body'];
         String author = replyData['data']['author'];
         int score = replyData['data']['score'];
+        String flair='';
+        int numAwards = commentData['data']['total_awards_received'];
+        if(replyData['data']['author_flair_text']!=null){
+           flair = replyData['data']['author_flair_text'];
+        }
         List<Comment> rep2 = [];
         _replyFactory(replyData, rep2);
-        Comment comment = new Comment(id, author, content, score, time, rep2, url);
+        Comment comment = new Comment(id, author, content, score, time, rep2, url, flair, numAwards);
         replies.add(comment);
       }
     }

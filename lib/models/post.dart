@@ -14,6 +14,8 @@ class Post {
   int numComments;
   String url;
   int numAwards;
+  String mediaURL;
+  bool media = false;
 
   Post(this.id,this.authorID,this.authorName,
       this.imageURL, this.imageURLPreview,
@@ -27,5 +29,7 @@ class Post {
       this.title, this.selftext, this.subreddit,
       this.score, this.numComments, this.time, String url,this.numAwards){
     this.url = 'www.reddit.com'+url;
+
   }
+
 }

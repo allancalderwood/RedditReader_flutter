@@ -171,14 +171,52 @@ class _commentWidgettState extends State<commentWidget> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        FlatButton(
-                          padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                          onPressed: (){goToUser(widget.comment);},
-                          shape: new RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(50.0),
-                          ),
-                          color: currentTheme.accentColor,
-                          child: Text('${widget.comment.author}', style: currentTheme.textTheme.headline5),
+                        Row(
+                          children: <Widget>[
+                            FlatButton(
+                              padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                              onPressed: (){goToUser(widget.comment);},
+                              shape: new RoundedRectangleBorder(
+                                borderRadius: new BorderRadius.circular(50.0),
+                              ),
+                              color: currentTheme.accentColor,
+                              child: Text('${widget.comment.author}', style: currentTheme.textTheme.headline5),
+                            ),
+                            (widget.comment.numAwards>0)? Row(
+                              children: <Widget>[
+                                SizedBox(width: 10,),
+                                Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(50.0),
+                                      color: Colors.orangeAccent.withOpacity(0.9),
+                                    ),
+                                    padding: EdgeInsets.fromLTRB(0, 0,0, 0),
+                                    child: Padding(
+                                      padding: EdgeInsets.all(7),
+                                      child: Row(
+                                        children: <Widget>[
+                                          Icon(Icons.stars, size: 20, color: Colors.white,),
+                                          SizedBox(width:5),
+                                          Text('${widget.comment.numAwards}', style: currentTheme.textTheme.headline4),
+                                        ],
+                                      ),
+                                    )
+                                )
+                              ],
+                            ):
+                            SizedBox(),
+                           (widget.comment.flair=='')? SizedBox():
+                            Row(
+                              children: <Widget>[
+                                SizedBox(width: 10,),
+                                (widget.comment.flair.length>=34)?
+                                ( (widget.comment.flair.length>=40)? Text('${widget.comment.flair.substring(0,39)}..', style: TextStyle(fontSize: 11.0, color: currentTheme.textTheme.headline5.color))
+                                    : Text('${widget.comment.flair}', style: TextStyle(fontSize: 11.0, color: currentTheme.textTheme.headline5.color))
+                                ):
+                                Text('${widget.comment.flair}', style: currentTheme.textTheme.headline5),
+                              ],
+                            )
+                          ],
                         ),
                         Container(
                             decoration: BoxDecoration(

@@ -155,14 +155,41 @@ class _ExpandedPostWidgetState extends State<ExpandedPostWidget> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        FlatButton(
-                          padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                          onPressed: (){goToSubreddit(widget.post);},
-                          shape: new RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(50.0),
-                          ),
-                          color: currentTheme.accentColor,
-                          child: Text('r/${widget.post.subreddit}', style: currentTheme.textTheme.headline5),
+                        Row(
+                          children: <Widget>[
+                            FlatButton(
+                              padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                              onPressed: (){goToSubreddit(widget.post);},
+                              shape: new RoundedRectangleBorder(
+                                borderRadius: new BorderRadius.circular(50.0),
+                              ),
+                              color: currentTheme.accentColor,
+                              child: Text('r/${widget.post.subreddit}', style: currentTheme.textTheme.headline5),
+                            ),
+                            (widget.post.numAwards>0)? Row(
+                              children: <Widget>[
+                                SizedBox(width: 10,),
+                                Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(50.0),
+                                      color: Colors.orangeAccent.withOpacity(0.9),
+                                    ),
+                                    padding: EdgeInsets.fromLTRB(0, 0,0, 0),
+                                    child: Padding(
+                                      padding: EdgeInsets.all(7),
+                                      child: Row(
+                                        children: <Widget>[
+                                          Icon(Icons.stars, size: 20, color: Colors.white,),
+                                          SizedBox(width:5),
+                                          Text('${widget.post.numAwards}', style: currentTheme.textTheme.headline4),
+                                        ],
+                                      ),
+                                    )
+                                )
+                              ],
+                            ):
+                            SizedBox()
+                          ],
                         ),
                         SizedBox(width: 10,),
                         Container(

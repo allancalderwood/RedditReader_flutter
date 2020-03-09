@@ -13,6 +13,7 @@ ThemeData buildDefaultTheme() {
       primaryColorDark:const Color(0xff171717),
       canvasColor:const Color(0xff171717),
       backgroundColor: const Color(0xff1C1C1C),
+      dividerColor: Colors.transparent,
 
       // Themes for text
       textTheme: TextTheme(
@@ -56,6 +57,7 @@ ThemeData buildLightTheme() {
       canvasColor:const Color(0xffE2E2E2),
       backgroundColor: const Color(0xffE2E2E2),
       splashColor: const Color(0xffE2E2E2),
+      dividerColor: Colors.transparent,
 
       // Themes for text
       textTheme: TextTheme(

@@ -12,6 +12,10 @@ void commentFactory(var jsonData, List<Comment> comments){
       String author = commentData['data']['author'];
       String url = commentData['data']['permalink'];
       int score = commentData['data']['score'];
+      bool collapsed = commentData['data']['collapsed'];
+      if(collapsed==null){
+        collapsed=false;
+      }
       String flair='';
       int numAwards = commentData['data']['total_awards_received'];
       if(commentData['data']['author_flair_text']!=null){
@@ -19,7 +23,7 @@ void commentFactory(var jsonData, List<Comment> comments){
       }
       List<Comment> replies = [];
       _replyFactory(commentData, replies);
-      Comment comment = new Comment(id, author, content, score, time, replies, url, flair, numAwards);
+      Comment comment = new Comment(id, author, content, score, time, replies, url, flair, numAwards, collapsed);
       comments.add(comment);
     }
   }
@@ -38,13 +42,17 @@ void _replyFactory(var commentData, List<Comment> replies){
         String author = replyData['data']['author'];
         int score = replyData['data']['score'];
         String flair='';
+        bool collapsed = replyData['data']['collapsed'];
+        if(collapsed==null){
+          collapsed=false;
+        }
         int numAwards = commentData['data']['total_awards_received'];
         if(replyData['data']['author_flair_text']!=null){
            flair = replyData['data']['author_flair_text'];
         }
         List<Comment> rep2 = [];
         _replyFactory(replyData, rep2);
-        Comment comment = new Comment(id, author, content, score, time, rep2, url, flair, numAwards);
+        Comment comment = new Comment(id, author, content, score, time, rep2, url, flair, numAwards, collapsed);
         replies.add(comment);
       }
     }

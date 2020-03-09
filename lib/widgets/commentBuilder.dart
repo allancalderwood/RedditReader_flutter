@@ -163,186 +163,198 @@ class _commentWidgettState extends State<commentWidget> {
             child: InkWell(
               onTap: (){showCommentOptions(widget.comment);},
               child: Padding(
-                padding: EdgeInsets.all(10.00),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Row(
+                padding: EdgeInsets.fromLTRB(0,10,0,0),
+                child:
+                    ExpansionTile(
+                      initiallyExpanded: (!(widget.comment.collapsed)),
+                      title: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            FlatButton(
-                              padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                              onPressed: (){goToUser(widget.comment);},
-                              shape: new RoundedRectangleBorder(
-                                borderRadius: new BorderRadius.circular(50.0),
-                              ),
-                              color: currentTheme.accentColor,
-                              child: Text('${widget.comment.author}', style: currentTheme.textTheme.headline5),
-                            ),
-                            (widget.comment.numAwards>0)? Row(
-                              children: <Widget>[
-                                SizedBox(width: 10,),
-                                Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(50.0),
-                                      color: Colors.orangeAccent.withOpacity(0.9),
-                                    ),
-                                    padding: EdgeInsets.fromLTRB(0, 0,0, 0),
-                                    child: Padding(
-                                      padding: EdgeInsets.all(7),
-                                      child: Row(
-                                        children: <Widget>[
-                                          Icon(Icons.stars, size: 20, color: Colors.white,),
-                                          SizedBox(width:5),
-                                          Text('${widget.comment.numAwards}', style: currentTheme.textTheme.headline4),
-                                        ],
-                                      ),
-                                    )
-                                )
-                              ],
-                            ):
-                            SizedBox(),
-                           (widget.comment.flair=='')? SizedBox():
-                            Row(
-                              children: <Widget>[
-                                SizedBox(width: 10,),
-                                (widget.comment.flair.length>=34)?
-                                ( (widget.comment.flair.length>=40)? Text('${widget.comment.flair.substring(0,39)}..', style: TextStyle(fontSize: 11.0, color: currentTheme.textTheme.headline5.color))
-                                    : Text('${widget.comment.flair}', style: TextStyle(fontSize: 11.0, color: currentTheme.textTheme.headline5.color))
-                                ):
-                                Text('${widget.comment.flair}', style: currentTheme.textTheme.headline5),
-                              ],
-                            )
-                          ],
-                        ),
-                        Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50.0),
-                              color: currentTheme.accentColor,
-                            ),
-                            padding: EdgeInsets.fromLTRB(0, 0,0, 0),
-                            child: Padding(
-                              padding: EdgeInsets.all(5),
-                              child: Row(
-                                children: <Widget>[
-                                  Icon(Icons.access_alarm, size: 15,),
-                                  SizedBox(width:5),
-                                  Text('${widget.comment.time}', style: currentTheme.textTheme.headline4),
-                                ],
-                              ),
-                            )
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 10,),
-                    Text(widget.comment.content, style: currentTheme.textTheme.bodyText1,),
-                    SizedBox(height: 20,),
-                    Container(
+                      Row(
+                      children: <Widget>[
+                      FlatButton(
+                      padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                      onPressed: (){goToUser(widget.comment);},
+                      shape: new RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(50.0),
+                      ),
+                      color: currentTheme.accentColor,
+                      child: Text('${widget.comment.author}', style: currentTheme.textTheme.headline5),
+                      ),
+                      (widget.comment.numAwards>0)? Row(
+                      children: <Widget>[
+                      SizedBox(width: 10,),
+                      Container(
+                      decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50.0),
+                      color: Colors.orangeAccent.withOpacity(0.9),
+                      ),
+                      padding: EdgeInsets.fromLTRB(0, 0,0, 0),
                       child: Padding(
-                          padding: EdgeInsets.all(1),
-                          child: Column(
+                      padding: EdgeInsets.all(7),
+                      child: Row(
+                      children: <Widget>[
+                      Icon(Icons.stars, size: 20, color: Colors.white,),
+                      SizedBox(width:5),
+                      Text('${widget.comment.numAwards}', style: currentTheme.textTheme.headline4),
+                      ],
+                      ),
+                      )
+                      )
+                      ],
+                      ):
+                      SizedBox(),
+                      (widget.comment.flair=='')? SizedBox():
+                        Row(
+                        children: <Widget>[
+                        SizedBox(width: 10,),
+                          (widget.comment.flair.length>=34)?
+                          ( (widget.comment.flair.length>=40)? Text('${widget.comment.flair.substring(0,39)}..', style: TextStyle(fontSize: 11.0, color: currentTheme.textTheme.headline5.color))
+                              : Text('${widget.comment.flair}', style: TextStyle(fontSize: 11.0, color: currentTheme.textTheme.headline5.color))
+                          ):
+                          Text('${widget.comment.flair}', style: currentTheme.textTheme.headline5),
+                        ],
+                        )
+                        ],
+                        ),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50.0),
+                                color: currentTheme.accentColor,
+                              ),
+                              padding: EdgeInsets.fromLTRB(0, 0,0, 0),
+                              child: Padding(
+                                padding: EdgeInsets.all(5),
+                                child: Row(
+                                  children: <Widget>[
+                                    Icon(Icons.access_alarm, size: 15,),
+                                    SizedBox(width:5),
+                                    Text('${widget.comment.time}', style: currentTheme.textTheme.headline4),
+                                  ],
+                                ),
+                              )
+                          ),
+                        )
+                      ],
+                      ),
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.all(10),
+                          child:Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      Row(
-                                        children: <Widget>[
-                                          Text('${widget.comment.score}', style: currentTheme.textTheme.headline4),
-                                          Text(' pts   ', style: TextStyle(fontSize: 15.0, color: currentTheme.splashColor)),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  Container(
-                                    child:InkWell(
-                                      onTap: (){
-                                        setState(() {
-                                          if(upvoted){
-                                            upvoted = false;
-                                            widget.comment.score--;
-                                            vote(widget.comment.id, 0);
-                                          }else{
-                                            upvoted = true;
-                                            downvoted = false;
-                                            widget.comment.score++;
-                                            vote(widget.comment.id, 1);
-                                          }
-                                        });
-                                      },
-                                      child: upvoted ? Icon(Icons.arrow_upward, size: 35, color: Color(0xff31B3A4)) : Icon(Icons.arrow_upward, size: 35, color: currentTheme.splashColor),
-                                    ),
-                                  ),
-                                  Container(
-                                    child: InkWell(
-                                      onTap: (){
-                                        setState(() {
-                                          if(downvoted){
-                                            widget.comment.score++;
-                                            downvoted = false;
-                                            vote(widget.comment.id, 0);
-                                          }else{
-                                            downvoted = true;
-                                            upvoted = false;
-                                            widget.comment.score--;
-                                            vote(widget.comment.id, -1);
-                                          }
-                                        });
-                                      },
-                                      child: downvoted ? Icon(Icons.arrow_downward, size: 35, color: Color((0xffD5433F))) : Icon(Icons.arrow_downward, size: 35, color: currentTheme.splashColor),
-                                    ),
-                                  ),
-                                  Container(
-                                    child: InkWell(
-                                      onTap: (){
-                                        setState(() {
-                                          if(liked){
-                                            liked = false;
-                                            unsave(widget.comment.id);
-                                          }else{
-                                            liked = true;
-                                            save(widget.comment.id, "None");
-                                          }
-                                        });
-                                      },
-                                      child: liked ? Icon(Icons.star, size: 35, color: Color((0xffD5AE3F))) : Icon(Icons.star_border, size: 35, color: currentTheme.splashColor),
-                                    ),
-                                  ),
-                                ],
+                              SizedBox(height: 10,),
+                              Text(widget.comment.content, style: currentTheme.textTheme.bodyText1,),
+                              SizedBox(height: 20,),
+                              Container(
+                                child: Padding(
+                                    padding: EdgeInsets.all(1),
+                                    child: Column(
+                                      children: <Widget>[
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: <Widget>[
+                                                Row(
+                                                  children: <Widget>[
+                                                    Text('${widget.comment.score}', style: currentTheme.textTheme.headline4),
+                                                    Text(' pts   ', style: TextStyle(fontSize: 15.0, color: currentTheme.splashColor)),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                            Container(
+                                              child:InkWell(
+                                                onTap: (){
+                                                  setState(() {
+                                                    if(upvoted){
+                                                      upvoted = false;
+                                                      widget.comment.score--;
+                                                      vote(widget.comment.id, 0);
+                                                    }else{
+                                                      upvoted = true;
+                                                      downvoted = false;
+                                                      widget.comment.score++;
+                                                      vote(widget.comment.id, 1);
+                                                    }
+                                                  });
+                                                },
+                                                child: upvoted ? Icon(Icons.arrow_upward, size: 35, color: Color(0xff31B3A4)) : Icon(Icons.arrow_upward, size: 35, color: currentTheme.splashColor),
+                                              ),
+                                            ),
+                                            Container(
+                                              child: InkWell(
+                                                onTap: (){
+                                                  setState(() {
+                                                    if(downvoted){
+                                                      widget.comment.score++;
+                                                      downvoted = false;
+                                                      vote(widget.comment.id, 0);
+                                                    }else{
+                                                      downvoted = true;
+                                                      upvoted = false;
+                                                      widget.comment.score--;
+                                                      vote(widget.comment.id, -1);
+                                                    }
+                                                  });
+                                                },
+                                                child: downvoted ? Icon(Icons.arrow_downward, size: 35, color: Color((0xffD5433F))) : Icon(Icons.arrow_downward, size: 35, color: currentTheme.splashColor),
+                                              ),
+                                            ),
+                                            Container(
+                                              child: InkWell(
+                                                onTap: (){
+                                                  setState(() {
+                                                    if(liked){
+                                                      liked = false;
+                                                      unsave(widget.comment.id);
+                                                    }else{
+                                                      liked = true;
+                                                      save(widget.comment.id, "None");
+                                                    }
+                                                  });
+                                                },
+                                                child: liked ? Icon(Icons.star, size: 35, color: Color((0xffD5AE3F))) : Icon(Icons.star_border, size: 35, color: currentTheme.splashColor),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    )
+                                ),
                               ),
                             ],
-                          )
-                      ),
-                    ),
-                  ],
-                ),
+                          ),
+                        ),
+                        Container(
+                            padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                            color: RandomColor().randomColor(),
+                            child: (widget.comment.replies.isEmpty) ?
+                            SizedBox(height: 0,width: 0) :
+                            //commentWidget(comment: widget.comment.replies.elementAt(0))
+                            Container(
+                              child: ListView.builder(
+                                  scrollDirection: Axis.vertical,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: widget.comment.replies.length,
+                                  itemBuilder: (context, index){
+                                    return commentWidget(comment: widget.comment.replies[index]);
+                                  }
+                              ),
+                            )
+                        )
+                      ],
+                    )
               ),
             ),
           ),
         ),
-        Container(
-          padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-          color: RandomColor().randomColor(),
-          child: (widget.comment.replies.isEmpty) ?
-          SizedBox(height: 0,width: 0) :
-          //commentWidget(comment: widget.comment.replies.elementAt(0))
-          Container(
-            child: ListView.builder(
-                scrollDirection: Axis.vertical,
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: widget.comment.replies.length,
-                itemBuilder: (context, index){
-                  return commentWidget(comment: widget.comment.replies[index]);
-                }
-            ),
-          )
-        )
       ],
     );
   }
@@ -459,41 +471,49 @@ class _commentWidgetViewOnlyState extends State<commentWidgetViewOnly> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        FlatButton(
-                          padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                          onPressed: (){goToUser(widget.comment);},
-                          shape: new RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(50.0),
-                          ),
-                          color: currentTheme.accentColor,
-                          child: Text('${widget.comment.author}', style: currentTheme.textTheme.headline5),
-                        ),
-                        Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50.0),
-                              color: currentTheme.accentColor,
+                    ExpansionTile(
+                      initiallyExpanded: true,
+                      title: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          FlatButton(
+                            padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                            onPressed: (){goToUser(widget.comment);},
+                            shape: new RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(50.0),
                             ),
-                            padding: EdgeInsets.fromLTRB(0, 0,0, 0),
-                            child: Padding(
-                              padding: EdgeInsets.all(5),
-                              child: Row(
-                                children: <Widget>[
-                                  Icon(Icons.access_alarm, size: 15,),
-                                  SizedBox(width:5),
-                                  Text('${widget.comment.time}', style: currentTheme.textTheme.headline4),
-                                ],
-                              ),
-                            )
-                        ),
+                            color: currentTheme.accentColor,
+                            child: Text('${widget.comment.author}', style: currentTheme.textTheme.headline5),
+                          ),
+                          SizedBox(width: 10,),
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(0, 10,0, 0),
+                            child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50.0),
+                                  color: currentTheme.accentColor,
+                                ),
+                                padding: EdgeInsets.fromLTRB(0, 0,0, 0),
+                                child: Padding(
+                                  padding: EdgeInsets.all(5),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Icon(Icons.access_alarm, size: 15,),
+                                      SizedBox(width:5),
+                                      Text('${widget.comment.time}', style: currentTheme.textTheme.headline4),
+                                    ],
+                                  ),
+                                )
+                            ),
+                          )
+                        ],
+                      ),
+                      children: <Widget>[
+                        SizedBox(height: 10,),
+                        Text(widget.comment.content, style: currentTheme.textTheme.bodyText1,),
                       ],
                     ),
-                    SizedBox(height: 10,),
-                    Text(widget.comment.content, style: currentTheme.textTheme.bodyText1,),
-                    SizedBox(height: 20,),
                   ],
                 ),
               ),

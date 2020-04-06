@@ -40,7 +40,6 @@ class _MySavedState extends State<MySaved> {
     }
   }
 
-
   // content of the screen
   @override
   Widget build(BuildContext context) {

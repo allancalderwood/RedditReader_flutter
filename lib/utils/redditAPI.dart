@@ -148,14 +148,13 @@ void vote(String id, int vote)async{
 
 void save(String id, String category)async{
   String _body = "id=$id&category=$category";
-  http.Response response = await http.post(Uri.encodeFull(callBaseURL+'/api/vote'), headers: getHeader(), body: _body);
+  http.Response response = await http.post(Uri.encodeFull(callBaseURL+'/api/save'), headers: getHeader(), body: _body);
 
 }
 
 void unsave(String id)async{
   String _body = "id=$id";
-  http.Response response = await http.post(Uri.encodeFull(callBaseURL+'/api/vote'), headers: getHeader(), body: _body);
-
+  http.Response response = await http.post(Uri.encodeFull(callBaseURL+'/api/unsave'), headers: getHeader(), body: _body);
 }
 
 void subscribe(String sr, String action)async{

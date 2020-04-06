@@ -1,19 +1,14 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:redditreader_flutter/models/comment.dart';
 import 'package:redditreader_flutter/models/post.dart';
-
 import 'package:redditreader_flutter/styles/theme.dart';
 import 'package:redditreader_flutter/utils/commentFactory.dart';
-
 import 'package:redditreader_flutter/widgets/commentBuilder.dart';
 import 'package:redditreader_flutter/widgets/expandedPost.dart';
-
 import 'package:redditreader_flutter/utils/redditAPI.dart';
-
 
 class PostPage extends StatefulWidget {
   PostPage({Key key, this.post}) : super(key: key);
@@ -34,7 +29,7 @@ class _PostPageState extends State<PostPage> {
 
   Future<List<Comment>> _loadComments()async{
     String id = widget.post.id.substring(3);
-    http.Response data = await http.get(Uri.encodeFull(callBaseURL+'/r/${widget.post.subreddit}/comments/${id}.json'), headers: getHeader());
+    http.Response data = await http.get(Uri.encodeFull(callBaseURL+'/r/${widget.post.subreddit}/comments/$id.json'), headers: getHeader());
     var jsonData = json.decode(data.body);
     List<Comment> comments = [];
     commentFactory(jsonData, comments);

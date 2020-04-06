@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:redditreader_flutter/models/post.dart';
 import 'package:redditreader_flutter/models/subreddit.dart';
 import 'package:redditreader_flutter/models/userOther.dart';
@@ -10,6 +11,7 @@ import 'package:redditreader_flutter/screens/myProfile.dart';
 import 'package:redditreader_flutter/screens/postPage.dart';
 import 'package:redditreader_flutter/screens/postReply.dart';
 import 'package:redditreader_flutter/screens/subredditPage.dart';
+import 'package:redditreader_flutter/screens/viewImage.dart';
 import 'package:redditreader_flutter/styles/theme.dart';
 import 'package:redditreader_flutter/utils/redditAPI.dart';
 import 'package:share/share.dart';
@@ -319,7 +321,7 @@ class _postWidgetState extends State<postWidget> {
                   ],
                 ),
               ),
-              postImage(widget.post),
+              postImage(context, widget.post),
               Container(
                 child: Padding(
                     padding: EdgeInsets.all(10),
@@ -431,17 +433,25 @@ class _postWidgetState extends State<postWidget> {
 }
 
 
-Widget postImage(Post p){
+Widget postImage(BuildContext context, Post p){
   if(p.imageURLPreview!="self" ){
     if(p.imageURLPreview!="nsfw"){
-      return ClipRRect(
-          child: FadeInImage(
-            image: NetworkImage(p.imageURL),
-            placeholder: NetworkImage(p.imageURLPreview),
-            height: imgHeight(p.imageHeight),
-            width: imgWidth(p.imageWidth),
-            fit: BoxFit.fill,
-          )
+      return InkWell(
+        onTap: (){
+          Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ImagePage(post: p))
+          );
+        },
+        child: ClipRRect(
+            child: FadeInImage(
+              image: NetworkImage(p.imageURL),
+              placeholder: NetworkImage(p.imageURLPreview),
+              height: imgHeight(p.imageHeight),
+              width: imgWidth(p.imageWidth),
+              fit: BoxFit.fill,
+            )
+        ),
       );
     }else{
       return ClipRRect(

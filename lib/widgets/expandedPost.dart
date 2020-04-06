@@ -10,6 +10,7 @@ import 'package:redditreader_flutter/screens/myProfile.dart';
 import 'package:redditreader_flutter/screens/postPage.dart';
 import 'package:redditreader_flutter/screens/postReply.dart';
 import 'package:redditreader_flutter/screens/subredditPage.dart';
+import 'package:redditreader_flutter/screens/viewImage.dart';
 import 'package:redditreader_flutter/styles/theme.dart';
 import 'package:redditreader_flutter/utils/redditAPI.dart';
 import 'package:share/share.dart';
@@ -84,13 +85,6 @@ class _ExpandedPostWidgetState extends State<ExpandedPostWidget> {
     );
   }
 
-  void loadPost(Post post){
-    Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => PostPage(post: post ))
-    );
-  }
-
   void reply(Post post) {
     Navigator.push(
         context,
@@ -144,7 +138,7 @@ class _ExpandedPostWidgetState extends State<ExpandedPostWidget> {
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.00))),
         child: InkWell(
-          onTap: (){loadPost(widget.post);},
+          onTap: (){},
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
@@ -219,7 +213,7 @@ class _ExpandedPostWidgetState extends State<ExpandedPostWidget> {
                   ],
                 ),
               ),
-              postImage(widget.post),
+              postImage(context, widget.post),
               Container(
                 child: Padding(
                     padding: EdgeInsets.all(10),
@@ -331,17 +325,25 @@ class _ExpandedPostWidgetState extends State<ExpandedPostWidget> {
 }
 
 
-Widget postImage(Post p){
+Widget postImage(BuildContext context, Post p){
   if(p.imageURLPreview!="self" ){
     if(p.imageURLPreview!="nsfw"){
-      return ClipRRect(
-          child: FadeInImage(
-            image: NetworkImage(p.imageURL),
-            placeholder: NetworkImage(p.imageURLPreview),
-            height: imgHeight(p.imageHeight),
-            width: imgWidth(p.imageWidth),
-            fit: BoxFit.fill,
-          )
+      return InkWell(
+        onTap: (){
+          Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ImagePage(post: p))
+          );
+        },
+        child: ClipRRect(
+            child: FadeInImage(
+              image: NetworkImage(p.imageURL),
+              placeholder: NetworkImage(p.imageURLPreview),
+              height: imgHeight(p.imageHeight),
+              width: imgWidth(p.imageWidth),
+              fit: BoxFit.fill,
+            )
+        ),
       );
     }else{
       return ClipRRect(
@@ -356,7 +358,7 @@ Widget postImage(Post p){
   } else return Padding(
     padding: EdgeInsets.all(15.00),
     child: Container(
-      child: Text('${p.selftext}',style: currentTheme.textTheme.bodyText1),
+      child: Text('${p.selftext}', maxLines:8, overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: 13.0, color: currentTheme.splashColor)),
     ),
   );
 }

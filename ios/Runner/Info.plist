@@ -14,6 +14,8 @@
         <true/>
         <key>NSAllowsArbitraryLoadsInWebContent</key>
         <true/>
+        <key>NSPhotoLibraryUsageDescription</key>
+        <true/>
     </dict>
 	<key>io.flutter.embedded_views_preview</key>
     <string>YES</string>
